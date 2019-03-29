@@ -103,25 +103,25 @@
 
 
 
-  <meta name="description" content="利用GAN来做极小人脸检测">
+  <meta name="description" content="ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）">
 <meta name="keywords" content="轻量化卷积,dw convolution,group convolution">
 <meta property="og:type" content="article">
-<meta property="og:title" content="论文阅读-ShuffleNet">
+<meta property="og:title" content="论文阅读- ShuffleNet">
 <meta property="og:url" content="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-ShuffleNet/index.html">
 <meta property="og:site_name" content="Joey&#39;s Notes">
-<meta property="og:description" content="利用GAN来做极小人脸检测">
+<meta property="og:description" content="ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg">
-<meta property="og:image" content="http://note.youdao.com/src/01E3DDB023D544CA92042AEF445AE3DD">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm7cnnbqj30f0018q33.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm82ojk3j31f40ns1kx.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm8qg49sj31dy0bkgom.jpg">
-<meta property="og:updated_time" content="2019-03-27T12:59:07.821Z">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho2vtyw2j31ec0luq8i.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho49a3edj31dw0mswkf.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho4wt4yfj31dw0kqafi.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho5f4ukqj310k0940v0.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho5yasjzj310q0c2add.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho6hbpczj314y0u0gxd.jpg">
+<meta property="og:updated_time" content="2019-03-27T13:39:24.460Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="论文阅读-ShuffleNet">
-<meta name="twitter:description" content="利用GAN来做极小人脸检测">
-<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg">
+<meta name="twitter:title" content="论文阅读- ShuffleNet">
+<meta name="twitter:description" content="ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho2vtyw2j31ec0luq8i.jpg">
 
 
 
@@ -140,7 +140,7 @@
   };
 </script>
 
-  <title>论文阅读-ShuffleNet | Joey's Notes</title>
+  <title>论文阅读- ShuffleNet | Joey's Notes</title>
   
 
 
@@ -402,7 +402,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">论文阅读-ShuffleNet
+          <h1 class="post-title" itemprop="name headline">论文阅读- ShuffleNet
 
               
             
@@ -428,7 +428,7 @@
                 
               
 
-              <time title="Created: 2019-03-27 18:55:31 / Modified: 20:59:07" itemprop="dateCreated datePublished" datetime="2019-03-27T18:55:31+08:00">2019-03-27</time>
+              <time title="Created: 2019-03-27 21:33:49 / Modified: 21:39:24" itemprop="dateCreated datePublished" datetime="2019-03-27T21:33:49+08:00">2019-03-27</time>
             
 
             
@@ -471,7 +471,7 @@
           
 
           
-            <div class="post-description">利用GAN来做极小人脸检测</div>
+            <div class="post-description">ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）。在ARM-based移动设备上，它和AlexNet准确率可比较的同时速度快上13倍。</div>
           
 
         </div>
@@ -487,62 +487,38 @@
       
 
       
-        <p>论文标题：Finding Tiny Faces in the Wild with Generative Adversarial Network 【<a href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Bai_Finding_Tiny_Faces_CVPR_2018_paper.pdf" target="_blank" rel="noopener">pdf</a>】</p>
-<p>作者：Yancheng Bai， Yongqiang Zhang， Mingli Ding，Bernard Ghanem</p>
-<p>本论文被CVPR2018会议录用，并评为oral层次。GAN自从2014年被提出，至今“有名有姓”的GAN网络已经有超过200种，这次cvpr会议上也有大量的基于GAN的论文，半监督学习的GAN在图像方面依旧大有可为。因此选取了一篇比较有质量的GAN的论文进行研读。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg" alt></p>
-<h2 id="背景与问题描述"><a href="#背景与问题描述" class="headerlink" title="背景与问题描述"></a>背景与问题描述</h2><p>人脸检测（Face Detection）是计算机视觉中的一个基本和重要的问题，是一个许多后续基于人脸的应用程序的关键一步。通常来说，人脸检测包括人脸的解析、验证以及标注和检索等。在过去的几十年里，人脸检测已被广泛研究，众多的准确有效的方法提出了使得在大多数受限的场景下人脸检测的效果都极好。最近的作品关注的是在不受控制的环境下的人脸，由于比例、模糊、姿势、表情和光照的显著变化，这是一个更具挑战性的问题。</p>
-<p>现代人脸探测器在大中型人脸上取得了令人瞩目的效果，但在小人脸上的性能却远远不能令人满意。小脸检测通常是指例如10×10像素这一量级的人脸检测，它目前主要有两大问题：</p>
-<p>第一，小脸由于像素过少，缺乏足够的详细信息来区分相似的背景，比如脸或手的一部分；</p>
-<p>第二，现在的人脸检测器通常使用CNN卷积神经网络架构，采用步长为8、16或32的下采样卷积特征图来表示人脸，这些特征图丢失了大部分空间信息，过于粗糙，无法描述小人脸。</p>
-<p>为了检测小人脸，[28]使用双线性操作直接对图像进行上采样，并对上采样图像进行详尽的人脸搜索。然而，这种方法会增加计算成本，推理时间也会大大增加。此外,图像通常与一个小升级因素放大(最多2×)[28],否则,将生成工件。此外，[1,14,25,37]利用中间的conv feature map表示特定尺度下的人脸，保持了计算量与性能之间的平衡。然而，浅层细粒度的中间conv feature map缺乏识别能力，导致了许多假阳性结果。更重要的是，这些方法不考虑其他挑战，如模糊和照明。</p>
-<p>本篇论文做出了以下三个主要贡献：</p>
-<ol>
-<li>提出了一种新的统一的端到端卷积神经网络人脸检测体系结构，利用超分辨率和细化网络生成真实、清晰的高分辨率图像，并引入鉴别器网络对人脸和非人脸进行分类。</li>
-<li>引入了一种新的丢包方法，使鉴别器网络能够同时分辨真假图像和真伪图像。更重要的是，分类损失用来引导生成网络生成更清晰的人脸，从而更容易分类。</li>
-</ol>
-<ol start="3">
-<li>最后，证明了提出的方法在从模糊的小人脸恢复清晰高分辨率人脸方面的有效性，并证明了该检测方法在较宽的人脸数据集上，特别是在最具挑战性的硬子集上，其检测性能优于其他最先进的方法。</li>
-</ol>
-<h2 id="算法简介"><a href="#算法简介" class="headerlink" title="算法简介"></a>算法简介</h2><p>本篇论文中，一共使用了三方面的技术：</p>
-<ol>
-<li>Face Detection</li>
-<li>Super-resolution and Reﬁnement Network</li>
-<li>Generative Adversarial Networks</li>
-</ol>
-<h3 id="FaceDetector"><a href="#FaceDetector" class="headerlink" title="FaceDetector"></a>FaceDetector</h3><p>现有的人脸检测方法大致可以分为手工制作的基于特征的方法和基于cnn的方法。</p>
-<p>此处介绍本文中作为基准的MB-FCN。</p>
-<p>MB-FCN：Multi-branch fully convolutional network，多分支人脸检测算法。具体做法是联合中间层feature map + 高层feature map特征，用于检测小尺度人脸，单模型的多分支检测，只需做单次前向预测即可检测图像中所有尺度的人脸，因为不用假定最小可检出人脸尺度，所以MB-FCN可以检出图像中所有尺度的人脸目标。</p>
-<p><img src="http://note.youdao.com/src/01E3DDB023D544CA92042AEF445AE3DD" alt="img"></p>
-<p>如fig 2，MB-FCN包含四个模块：</p>
-<ol>
-<li>共享的提特征主干网，本文使用ImageNet上预训练好的ResNet-50，图像经过主干网梭一把，就可以得到各层feature map啦；</li>
-<li>为每个分支，通过feature map的skip connection操作，concate不同分辨率的feature map，用于检测不同尺度的目标，结合fig 2，就是对不同分辨率的feature map使用到了上、下采样操作，使之尺度一致后再做concate；—- 这种融合多尺度feature map，single process检测不同尺度目标的方式，计算量肯定比使用图像金字塔，做multi process检测的方式，计算量小很多；</li>
-<li>对每个分支而言，通过FCN + multi-task学习的方式使各个分支用于特定尺度范围内的人脸；具体地，FCN先1 x 1 conv来一波以降低feature map的通道数，再接两个1 x 1 conv，输出reg、cls结果；</li>
-<li>得到每个分支的reg、cls结果，将结果转为包含得分的bbox，全局NMS一波，即得到最终结果；</li>
-</ol>
-<h3 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h3><p>在了解它的具体网络结构之前，我们先了解以下GAN。</p>
-<p>GAN也就是对抗生成网络，它通过一个对抗的国车给训练一个生成模型G。它包含两个网络，一个生成器G和一个鉴别器D。训练过程交替优化生成器G和鉴别器D，两者相互竞争。训练生成器器G产生样本欺骗鉴</p>
-<p>别器D，训练鉴别器D从生成器G器生成的样本和真样本中分辨真伪图像。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg" alt></p>
-<p>目标函数公式：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm7cnnbqj30f0018q33.jpg" alt></p>
-<p>具体过程：</p>
-<ul>
-<li>G是一个生成图片的网络，它接收一个随机的噪声z，通过这个噪声生成图片，记做G(z)。</li>
-<li>D是一个判别网络，判别一张图片是不是“真实的”。它的输入参数是x，x代表一张图片，输出D（x）代表x为真实图片的概率，如果为1，就代表100%是真实的图片，而输出为0，就代表不可能是真实的图片。</li>
-</ul>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>对于本篇论文，它的模型构建为：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm82ojk3j31f40ns1kx.jpg" alt></p>
-<p>首先，图像输入网络。</p>
-<p>第二步，以MB-FCN检测器作为基准，使用它来从输入图像中裁剪出阳性数据(即人脸)和阴性数据(即非人脸)，用于训练生成器和鉴别器，或者生成感兴趣区域(ROIs)进行测试。</p>
-<p>第三步，训练生成器从低分辨率输入图像中重建一个4倍上采样（也就是4<em>4提高到16</em>16）高分辨率图像。其中，先使用上采样子网络（upsample sub-network），以低分辨率图像作为输入，输出为超分辨率图像。再使用细化子网络（reﬁnement sub-network），这是因为第一步生成的图像是模糊的小人脸，缺乏精细的细节，而且受MSE loss的影响，产生的超分辨率人脸通常是模糊的。</p>
-<p>第四步，鉴别器网络为vgg19架构，具有两个并行的fc层，第一个fc层是对自然真实图像或生成的超分辨率图像进行区分，第二个fc层是对人脸或非人脸进行分类。</p>
-<p>三、四两步交替优化。</p>
-<p>具体的网络结构如下图：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm8qg49sj31dy0bkgom.jpg" alt></p>
-<p>生成器G中，我们不输入随机噪声，而是输入模糊的小脸。它的损失函数包括三部分，一部分是像素级的损失函数，一部分是对抗损失函数，另外移除了VGG的特征匹配损失换成。</p>
-<h2 id="思考与扩展建议"><a href="#思考与扩展建议" class="headerlink" title="思考与扩展建议"></a>思考与扩展建议</h2><p>本篇论文对于极小的人脸的检测有着比较好的实验效果，但同时，上采样的做法也导致部分非人脸的物体被误认为人脸。</p>
+        <p>论文标题：ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices 【<a href="https://arxiv.org/pdf/1707.01083.pdf" target="_blank" rel="noopener">pdf</a>】</p>
+<p>作者：Xiangyu Zhang∗ Xinyu Zhou∗ Mengxiao Lin Jian Sun</p>
+<p>旷视的轻量化卷积网络。</p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。</p>
+<p>这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。</p>
+<p>实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）。在ARM-based移动设备上，它和AlexNet准确率可比较的同时速度快上13倍。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>现阶段在解决视觉识别任务时构建更深更大的卷积网络是大势。本文则追求在有限运算次数中追求更高准确率。现有的轻量级模型聚焦在剪枝（pruning）、挤压（compressing）或者低位（low-bit）一个基础神经网络。</p>
+<p>本文注意到标准基础结构比如Xception、ResNeXt由于1<em>1卷积层的巨大消耗在小型网络中表现低效。本文采用pointwise group convolution（PGC）来减少1</em>1卷积层的计算复杂性。为了克服PGC带来的边际效应，本文使用channel shulffle来得到信息在特征层之间流动。</p>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>有效的模型设计。GoogleNet在更少复杂性下加深了网络深度。SqueezeNet在准确率维持的同时减少了参数和计算。ResNet使用了bottleneck结构。SENet引入了一个表现良好的轻量级计算的结构单元。</p>
+<p><strong>Group Convolution。</strong>组卷积的概念一开始是AlexNet为了在两个GPU上计算而提出的，在ResNeXt中显示出了它的效率。Depthwise separable convolution在Xception中被使用。最近的MobileNet使用可分卷积在轻量级模型上取得了最先进的结果。本文以全新的形式使用了组卷积和可分卷积。</p>
+<p><strong>Channel Shuffle Operation。</strong>据我们所知，通道洗牌操作之前很少在效率模型中被使用。CNN库cuda-convnet中支持“任意可分卷积”层，在组卷积中等同于任意通道洗牌。但是这样的任意洗牌操作的目的不同，后来也很少被用到。最近，另一个网络也在两阶段卷积中采用了这一创意，但是它没有发现通道洗牌的作用，也没有把它用于小型网络设计。</p>
+<p><strong>模型加速。</strong>模型加速是要在准确保持的情况下加速前向网络（inference）。剪枝网络在保持表现的同时减去了预训练模型的冗余链接。量化和因式分解的目的都是减去冗余计算来加速前向网络。实践中还有利用FFT加速CNN卷积计算。另外，Distilling（蒸馏）将大模型的信息提取到小模型中，使得训练小模型更为简单。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="组卷积中使用通道洗牌"><a href="#组卷积中使用通道洗牌" class="headerlink" title="组卷积中使用通道洗牌"></a>组卷积中使用通道洗牌</h3><p>​    现代卷积网络中通常由重复法人相同结构的构建块组成。其中，目前最为优秀的Xception或ResNeXt在构建块中引入可分卷积或者组卷积，以此来取得可靠能力和计算代价间的完美平衡。然而，本文 注意到它们都没有完整考虑点卷积的开销。比如，ResNeXt中只有3*3层使用了组卷积。结果是在ResNeXt的每个残差单元中点卷积占了93.4%的multiplication-adds操作。在小网络中，昂贵的点卷积导致了通道数受到复杂度的限制，这一点对准确度的降低有显著影响。</p>
+<p>为解决这一问题，一个直接的方法是在点卷积上使用通道可分连接（比如组卷积）。通过确保每次卷积操作只作用在对应的输入通道组上，组卷积显著地减少了计算代价。但是，多次组卷积堆叠在一起会产生边际效应：某一特定通道的输出只来源于输入通道的一部分。图1.a展示了两个堆叠的租卷积层。很显然特定组的输出只相关于组内输入，它使得通道组的信息流被固定在组内，削弱了代表性。</p>
+<p>如果我们让组卷积从不同组间获得输入信息，输入通道和输出通道就会充分相关（图1.b）。特别地，对于上一个组层产生的特征图，我们可以先在组内将通道再次分为子组，再在下一层在组中喂入不同的子组。这一步可以通过通道洗牌（图1. c）高效优雅地完成：假设一个g组的卷积层，它的输出有g<em>n个通道，我们先将输出通道reshape成（g，n）矩阵，将矩阵<em>*转置</em></em>后再拉平。注意，即便两个卷积层组数不同这一步依然有效。另外，通道洗牌是可微的，这意味着它可以被嵌入经段对端训练的网络结构中。</p>
+<p>通道洗牌使得利用多重组卷积构建更强力的网络变为可能。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho2vtyw2j31ec0luq8i.jpg" alt></p>
+<h3 id="ShuffleNet-Unit"><a href="#ShuffleNet-Unit" class="headerlink" title="ShuffleNet Unit"></a>ShuffleNet Unit</h3><p>利用通道洗牌，本文构建了特别为小型网络设计的全新的ShuffleNet单元。先介绍图2.a中的瓶颈单元设计原则。它是一个残差块（residual block）。在它的残差分支中，本文用计算经济的3<em>3可分卷积来替换3</em>3卷积。然后，本文将第一个点卷积层用点组卷积代替，再接了一个通道洗牌，这就形成了一个ShuffleNet单元（图2.b）。第二个点组卷积的作用是重新覆盖通道维度来适应残差捷径。为简化操作，第二个点组卷积后没有再接通道洗牌，结果也是可以接受的。Batch normalization和非线性化操作都相似于标准残差网络，但是在可分卷积后我们没有使用ReLU。鉴于ShuffleNet可能会和stride一起使用，我们在图2.c做了简单的两个改变：1.在捷径后加了一个3*3平均池化层2.用通道连接concat替换element-wise addition，使得扩发通道维数的操作计算更简单。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho49a3edj31dw0mswkf.jpg" alt></p>
+<p>相较于ResNet和ResNeXt，我们的模型在相同配置下计算更简便。比如，输入为c<em>h</em>w，瓶颈层通道数为m，那么ResNet需要hw（2cm+9m^2）FLOPS，ResNeXt需要hw（2cm+9m^2/g）FLOPS，但是ShuffleNet需要hw（2cm/g+9m）FLOPS，g表示组数。这意味着，同样的计算预算，ShuffleNet可以使用更宽的特征图。</p>
+<p>另外，ShuffleNet只在瓶颈层使用可分卷积。尽管可分卷积在理论上复杂度很低，本文发现在低能量移动设备很难效率实现，导致计算/内存可获得比例比其他维度操作低很多。这个缺点在Xception中也被提及。在ShuffleNet单元，我们只在瓶颈处使用可分卷积。</p>
+<h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p>整个网络结构构件在ShuffleNet单元上，在表格1中完整展示。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho4wt4yfj31dw0kqafi.jpg" alt></p>
+<p>网络结构中主要包含了三个阶段的ShuffleNet单元。每个阶段的第一个构建块是步长为2的，其他参数在一层中保持不变，进入下一层时输出通道数为变为2倍。类似于ResNet，本文在每个ShuffleNet单元设置瓶颈通道数为输出通道数的1/4。本文意在提供最为简单的偏好设计，但是也发现经过调参结果会更好。</p>
+<p>在ShuffleNet单元中，组数g控制着点卷积的稀疏度。表格1中显示了不同的g，我们调整了输出通道数来保持计算代价基本不变（~140MFLOPS）。显然，组数越大输出通道数越多（更多的卷积过滤器），也就能编码更多的信息，但是它也意味着每个单独的卷积过滤器因为相关输入通道变少而退化。</p>
+<p>为了使网络结构达到预计的复杂度，我们简单在通道数上应用了一个尺度参数s。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>本文的实验主要在ImageNet2012上进行。实验细节在此不做赘述。</p>
+<p>在ImageNet2012上得实验结果为：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho5f4ukqj310k0940v0.jpg" alt>采用通道洗牌的方式与不采用通道洗牌的不同结果：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho5yasjzj310q0c2add.jpg" alt><br>它与其他压缩模型的对比：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho6hbpczj314y0u0gxd.jpg" alt></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这篇论文模型压缩的主要起作用的piontwise group convolution，然后channel Shuffle提供了5%的错误率改善。</p>
 
       
     </div>
@@ -583,14 +559,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/03/27/论文阅读-TinyGAN/" rel="next" title="论文阅读-TinyFace GAN">
+                <i class="fa fa-chevron-left"></i> 论文阅读-TinyFace GAN
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/27/论文阅读-TinyGAN/" rel="prev" title="论文阅读-TinyFace GAN">
-                论文阅读-TinyFace GAN <i class="fa fa-chevron-right"></i>
+              <a href="/2019/03/29/论文阅读-darts/" rel="prev" title="论文阅读-darts">
+                论文阅读-darts <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -662,7 +642,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -683,7 +663,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -706,7 +688,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
@@ -777,7 +765,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景与问题描述"><span class="nav-number">1.</span> <span class="nav-text">背景与问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法简介"><span class="nav-number">2.</span> <span class="nav-text">算法简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FaceDetector"><span class="nav-number">2.1.</span> <span class="nav-text">FaceDetector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GAN"><span class="nav-number">2.2.</span> <span class="nav-text">GAN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">3.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考与扩展建议"><span class="nav-number">4.</span> <span class="nav-text">思考与扩展建议</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工作"><span class="nav-number">3.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">4.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组卷积中使用通道洗牌"><span class="nav-number">4.1.</span> <span class="nav-text">组卷积中使用通道洗牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ShuffleNet-Unit"><span class="nav-number">4.2.</span> <span class="nav-text">ShuffleNet Unit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络结构"><span class="nav-number">4.3.</span> <span class="nav-text">网络结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">5.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
@@ -1273,6 +1261,13 @@
   
 
   
+  
+
+  
+  
+
+  
+
 
   
 

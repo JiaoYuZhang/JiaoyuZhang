@@ -103,25 +103,29 @@
 
 
 
-  <meta name="description" content="利用GAN来做极小人脸检测">
-<meta name="keywords" content="GAN,人脸检测">
+  <meta name="description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
+<meta name="keywords" content="darts,NAS,autoML,轻量化卷积">
 <meta property="og:type" content="article">
-<meta property="og:title" content="论文阅读-TinyFace GAN">
-<meta property="og:url" content="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-TinyGAN/index.html">
+<meta property="og:title" content="论文阅读-darts">
+<meta property="og:url" content="https://jiaoyuzhang.github.io/2019/03/29/论文阅读-darts/index.html">
 <meta property="og:site_name" content="Joey&#39;s Notes">
-<meta property="og:description" content="利用GAN来做极小人脸检测">
+<meta property="og:description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg">
-<meta property="og:image" content="http://note.youdao.com/src/01E3DDB023D544CA92042AEF445AE3DD">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm7cnnbqj30f0018q33.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm82ojk3j31f40ns1kx.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm8qg49sj31dy0bkgom.jpg">
-<meta property="og:updated_time" content="2019-03-27T12:45:24.397Z">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1aiml9o9kj30ia0i0wg5.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1aip9bswoj30m00kctbg.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1aiyw5juhj306o0dut9c.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1aj9k3khzj31080f643i.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k697frydj31o60e2tph.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6lwncmvj31m80u0hdt.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1k6p1emunj31240ki7jt.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6ooqv18j30oq0w2als.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg">
+<meta property="og:updated_time" content="2019-03-29T17:47:26.625Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="论文阅读-TinyFace GAN">
-<meta name="twitter:description" content="利用GAN来做极小人脸检测">
-<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg">
+<meta name="twitter:title" content="论文阅读-darts">
+<meta name="twitter:description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg">
 
 
 
@@ -130,7 +134,7 @@
 
 
 
-  <link rel="canonical" href="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-TinyGAN/">
+  <link rel="canonical" href="https://jiaoyuzhang.github.io/2019/03/29/论文阅读-darts/">
 
 
 
@@ -140,7 +144,7 @@
   };
 </script>
 
-  <title>论文阅读-TinyFace GAN | Joey's Notes</title>
+  <title>论文阅读-darts | Joey's Notes</title>
   
 
 
@@ -385,7 +389,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-TinyGAN/">
+    <link itemprop="mainEntityOfPage" href="https://jiaoyuzhang.github.io/2019/03/29/论文阅读-darts/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Joey Zhang">
@@ -402,7 +406,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">论文阅读-TinyFace GAN
+          <h1 class="post-title" itemprop="name headline">论文阅读-darts
 
               
             
@@ -428,12 +432,24 @@
                 
               
 
-              <time title="Created: 2019-03-27 18:55:31 / Modified: 20:45:24" itemprop="dateCreated datePublished" datetime="2019-03-27T18:55:31+08:00">2019-03-27</time>
+              <time title="Created: 2019-03-29 23:06:07" itemprop="dateCreated datePublished" datetime="2019-03-29T23:06:07+08:00">2019-03-29</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-03-30 01:47:26" itemprop="dateModified" datetime="2019-03-30T01:47:26+08:00">2019-03-30</time>
               
             
           </span>
@@ -450,7 +466,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GAN/" itemprop="url" rel="index"><span itemprop="name">GAN</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NAS/" itemprop="url" rel="index"><span itemprop="name">NAS</span></a></span>
 
                 
                 
@@ -471,7 +487,7 @@
           
 
           
-            <div class="post-description">利用GAN来做极小人脸检测</div>
+            <div class="post-description">利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。</div>
           
 
         </div>
@@ -487,62 +503,92 @@
       
 
       
-        <p>论文标题：Finding Tiny Faces in the Wild with Generative Adversarial Network 【<a href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Bai_Finding_Tiny_Faces_CVPR_2018_paper.pdf" target="_blank" rel="noopener">pdf</a>】</p>
-<p>作者：Yancheng Bai， Yongqiang Zhang， Mingli Ding，Bernard Ghanem</p>
-<p>本论文被CVPR2018会议录用，并评为oral层次。GAN自从2014年被提出，至今“有名有姓”的GAN网络已经有超过200种，这次cvpr会议上也有大量的基于GAN的论文，半监督学习的GAN在图像方面依旧大有可为。因此选取了一篇比较有质量的GAN的论文进行研读。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg" alt></p>
-<h2 id="背景与问题描述"><a href="#背景与问题描述" class="headerlink" title="背景与问题描述"></a>背景与问题描述</h2><p>人脸检测（Face Detection）是计算机视觉中的一个基本和重要的问题，是一个许多后续基于人脸的应用程序的关键一步。通常来说，人脸检测包括人脸的解析、验证以及标注和检索等。在过去的几十年里，人脸检测已被广泛研究，众多的准确有效的方法提出了使得在大多数受限的场景下人脸检测的效果都极好。最近的作品关注的是在不受控制的环境下的人脸，由于比例、模糊、姿势、表情和光照的显著变化，这是一个更具挑战性的问题。</p>
-<p>现代人脸探测器在大中型人脸上取得了令人瞩目的效果，但在小人脸上的性能却远远不能令人满意。小脸检测通常是指例如10×10像素这一量级的人脸检测，它目前主要有两大问题：</p>
-<p>第一，小脸由于像素过少，缺乏足够的详细信息来区分相似的背景，比如脸或手的一部分；</p>
-<p>第二，现在的人脸检测器通常使用CNN卷积神经网络架构，采用步长为8、16或32的下采样卷积特征图来表示人脸，这些特征图丢失了大部分空间信息，过于粗糙，无法描述小人脸。</p>
-<p>为了检测小人脸，[28]使用双线性操作直接对图像进行上采样，并对上采样图像进行详尽的人脸搜索。然而，这种方法会增加计算成本，推理时间也会大大增加。此外,图像通常与一个小升级因素放大(最多2×)[28],否则,将生成工件。此外，[1,14,25,37]利用中间的conv feature map表示特定尺度下的人脸，保持了计算量与性能之间的平衡。然而，浅层细粒度的中间conv feature map缺乏识别能力，导致了许多假阳性结果。更重要的是，这些方法不考虑其他挑战，如模糊和照明。</p>
-<p>本篇论文做出了以下三个主要贡献：</p>
+        <p>DARTS：架构搜索的可微解决</p>
+<p>论文： DARTS: Differentiable Architecture Search 【<a href="https://arxiv.org/abs/1806.09055" target="_blank" rel="noopener">pdf</a>】【 <a href="https://github.com/quark0/darts" target="_blank" rel="noopener">code</a>】</p>
+<p>作者：<a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Liu%2C+H" target="_blank" rel="noopener">Hanxiao Liu</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Simonyan%2C+K" target="_blank" rel="noopener">Karen Simonyan</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Yang%2C+Y" target="_blank" rel="noopener">Yiming Yang</a></p>
+<h2 id="第一部分-什么是神经网络架构搜索"><a href="#第一部分-什么是神经网络架构搜索" class="headerlink" title="第一部分 什么是神经网络架构搜索"></a>第一部分 什么是神经网络架构搜索</h2><h3 id="1-1-神经网络架构搜索（Neural-Architecture-Search）"><a href="#1-1-神经网络架构搜索（Neural-Architecture-Search）" class="headerlink" title="1.1 神经网络架构搜索（Neural Architecture Search）"></a>1.1 神经网络架构搜索（Neural Architecture Search）</h3><p>深度学习模型在很多任务上都取得了不错的效果，但调参对于深度模型来说是一项非常苦难的事情，众多的超参数和网络结构参数会产生爆炸性的组合，常规的 random search 和 grid search 效率非常低，因此最近几年神经网络的架构搜索和超参数优化成为一个研究热点。<br>NAS通常由三部分组成。首先确定search space，然后选择search<br>strategy，最后选择评价策略并迭代优化。<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg" alt><br>搜索空间：搜索空间定义了优化问题的变量。深度学习模型的性能是由网络架构参数和对应的超参数来决定的，因此只需要对复杂模型的架构参数和对应的超参数进行优化即可。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1aiml9o9kj30ia0i0wg5.jpg" width="250," height="250"></p>
+<p>最开始为链式的搜索空间，然后RNN中也采用了分支搜索。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aip9bswoj30m00kctbg.jpg" width="250," height="250"></p>
+<p>现在，通常使用cell来对搜索空间做“降维”，能够大大提高搜索速度。    </p>
+<p>搜索策略：定义了使用怎样的算法可以快速、准确找到最优的网络结构参数配置。常见的搜索方法包括：随机搜索、贝叶斯优化、进化算法、强化学习、基于梯度的算法。<br>评价预估：用一些低保真的训练集来训练模型，借鉴于工程优化中的代理模型，参数级别的迁移。单次（One-Shot）架构搜索。</p>
+<h3 id="1-2-主流架构搜索-不可微的“黑箱”优化"><a href="#1-2-主流架构搜索-不可微的“黑箱”优化" class="headerlink" title="1.2 主流架构搜索-不可微的“黑箱”优化"></a>1.2 主流架构搜索-不可微的“黑箱”优化</h3><p> 国内做AutoML，主流搜索算法是进化算法或者强化算法进行不可微搜索。强化学习：NAS、ENAS， 进化算法：</p>
+<h2 id="第二部分-DARTS架构"><a href="#第二部分-DARTS架构" class="headerlink" title="第二部分 DARTS架构"></a>第二部分 DARTS架构</h2><h3 id="2-1-darts的整体构架"><a href="#2-1-darts的整体构架" class="headerlink" title="2. 1 darts的整体构架"></a>2. 1 darts的整体构架</h3><p>首先，我们介绍一下Darts的搜索空间与整体流程。</p>
+<p>搜索空间：在本文中以一个cell（或者叫building block）作为一个搜索空间。它是由nodes和edges构成的有向无环图。每个node被记为 <script type="math/tex">x^{(i)}</script> ，是一个特征表示（比如feature map）。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1aiyw5juhj306o0dut9c.jpg" width="200" height="250" align="center"></p>
+<p>而每条边edge被记为<script type="math/tex">o^{(i,j)}</script>，它表示的是从节点<script type="math/tex">x^{(i)}</script>到<script type="math/tex">x^{(j)}</script>所采用的操作（比如3*3卷积，最大池化），当然也可以是特殊的无操作<script type="math/tex">zero</script>。这样我们就可以把搜索空间表示为：</p>
+<script type="math/tex; mode=display">x^{(i)}=\sum_{j<i} o^{(i, j)}\left(x^{(j)}\right)</script><p>经过darts的优化获得最后的cell架构后，我们既可以把它堆叠成CNN网络，也可以递归连接成RNN网络。对于每个cell，我们规定它有两个输入和一个输出。对于CNN网络，两个输入是前两层的输出；对于RNN，两个输入时这一层的输入和上一层的状态。<br>以此为基础，我们可以看一下darts的整体流程：<br><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1aj9k3khzj31080f643i.jpg" width="600" height="250" align="center"></p>
 <ol>
-<li>提出了一种新的统一的端到端卷积神经网络人脸检测体系结构，利用超分辨率和细化网络生成真实、清晰的高分辨率图像，并引入鉴别器网络对人脸和非人脸进行分类。</li>
-<li>引入了一种新的丢包方法，使鉴别器网络能够同时分辨真假图像和真伪图像。更重要的是，分类损失用来引导生成网络生成更清晰的人脸，从而更容易分类。</li>
+<li>初始化时，每条边即操作是未知的</li>
+<li>采用松弛策略，使每条边上都进行多种候选操作</li>
+<li>采用bilevel optimazation来联合优化操作的混合概率和网络权重</li>
+<li>采用混合操作中概率最高的操作来替换混合操作，得到最终结构</li>
 </ol>
-<ol start="3">
-<li>最后，证明了提出的方法在从模糊的小人脸恢复清晰高分辨率人脸方面的有效性，并证明了该检测方法在较宽的人脸数据集上，特别是在最具挑战性的硬子集上，其检测性能优于其他最先进的方法。</li>
-</ol>
-<h2 id="算法简介"><a href="#算法简介" class="headerlink" title="算法简介"></a>算法简介</h2><p>本篇论文中，一共使用了三方面的技术：</p>
+<h3 id="2-2-优化策略与近似计算"><a href="#2-2-优化策略与近似计算" class="headerlink" title="2.2 优化策略与近似计算"></a>2.2 优化策略与近似计算</h3><p>接下来我们会详细介绍darts的整个优化策略。</p>
+<h4 id="1-将搜索空间可微化"><a href="#1-将搜索空间可微化" class="headerlink" title="1. 将搜索空间可微化"></a>1. 将搜索空间可微化</h4><p>darts通过引入softmax来做了一个简单的松弛方案，使得整个搜索空间变为可微的。softmax的公式如图，非常简单的公式。   </p>
+<script type="math/tex; mode=display">
+S_{i}=\frac{e^{i}}{\sum_{j} e^{j}}</script><p>扩展到本文中，就是这样的：</p>
+<script type="math/tex; mode=display">
+\overline{O}^{(i, j)}(x)=\sum_{o \in \mathcal{O}} \frac{\exp \left(\alpha_{o}^{(i, j)}\right)}{\sum_{o^{\prime} \in \mathcal{O}} \exp \left(\alpha_{o^{\prime}}^{(i, j)}\right)} o(x)</script><p>其中<script type="math/tex">\alpha^{(i, j)}</script>是一个向量，表示的是节点$ (i, j) $中的混合操作，$\overline{o}^{(i, j)}$是混合概率操作， $ \mathcal{O} $是候选操作集合。</p>
+<p>$\alpha$ 就是整体框架的向量表示。</p>
+<p>现在，我们就把操作选择从不可微转化为可微操作。</p>
+<p>我们最后在选择操作是就是选择概率最大的选项。</p>
+<script type="math/tex; mode=display">
+o^{(i, j)}=\operatorname{argmax}_{o \in \mathcal{O}} \alpha_{o}^{(i, j)}</script><h4 id="2-建模为双层优化问题"><a href="#2-建模为双层优化问题" class="headerlink" title="2. 建模为双层优化问题"></a>2. 建模为双层优化问题</h4><p>先定义两个loss： $L_{train}$和$L_{val}$。那么很显然，我们的最终目标是找到一个$\alpha$ 使得$L_{val}$最小，但是需要注意的是$L_{val}$不仅有关于$\alpha$，还有关于$w$。</p>
+<p>我们就可以得到目标函数：</p>
+<script type="math/tex; mode=display">
+\min _{\alpha} \mathcal{L}_{v a l}\left(w, \alpha\right)</script><p>但是必须注意的是，$w$是相关于$\alpha$的，架构$\alpha$的变化会带来$w$的改变，所以目标函数要变成：</p>
+<script type="math/tex; mode=display">
+\min _{\alpha} \mathcal{L}_{v a l}\left(w^{*}(\alpha), \alpha\right)</script><p>而$w$与$\alpha$的真正关系是怎样的呢？其实是$w$的选取，其实是相对于固定架构$\alpha$，取得最小的$L_{train}$时的$w^{*}$，也就是说，关于$w^{*}$选取的目标函数是：</p>
+<script type="math/tex; mode=display">
+w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</script><p>现在，我们得到了最后的优化函数，它是一个双层优化问题：</p>
+<script type="math/tex; mode=display">
+\begin{array}{cl}{\min _{\alpha}} & {\mathcal{L}_{v a l}\left(w^{*}(\alpha), \alpha\right)} \\ {\text { s.t. }} & {w^{*}(\alpha)=\operatorname{argmin}_{w} \mathcal{L}_{\text {train}}(w, \alpha)}\end{array}</script><p>（不太好理解的话，架构$\alpha$这个参数的地位有点类似于lr学习率，但是显然比简单线性增减的学习率复杂太多）。</p>
+<p>因为下层子问题的自变量$w$与上层问题的$L_{val}$无法直接用表达式表达出来，所以这个问题无法被简化为单层优化问题。双层问题的求解是非常复杂的，$\alpha$的每一次变化，$w$就需要重新求解一次。整个问题的时间复杂度可以达到$\mathrm{O}(|\mathrm{a}||\mathrm{w}|)$。</p>
+<p>而如何能够在实际中解决这个问题，我们需要采用一些近似优化的方法。</p>
+<h4 id="3-近似迭代优化：梯度下降"><a href="#3-近似迭代优化：梯度下降" class="headerlink" title="3. 近似迭代优化：梯度下降"></a>3. 近似迭代优化：梯度下降</h4><p>darts中采用了近似迭代的方法来解决这个问题，通过$w$和$\alpha$分别在权重和构架空间中的梯度下降步骤之间交替来完成优化。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1k697frydj31o60e2tph.jpg" alt></p>
+<p>我们来看这个优化算法，在第k步的时候，首先采用$\alpha{k-1}$的架构，通过$ \mathcal{L}_{t r a i n}\left(w_{k-1}, \alpha_{k-1}\right) $获得现在的权重$ w{k}$，利用梯度更新一步$ w{k}$， 再固定$ w{k}$，进行主问题的优化：</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{v a l}\left(w^{\prime}, a_{k-1}\right)=\mathcal{L}_{v a l}\left(w_{k}-\xi \nabla_{w} \mathcal{L}_{t r a i n}\left(w_{k}, \alpha_{k-1}\right), a_{k-1}\right)</script><p>其中，$\xi $是$ w$的学习率。$w_{k}-\xi \nabla_{w} \mathcal{L}_{t r a i n}\left(w_{k}, \alpha_{k-1}\right)$这一项就是表示$ w{k}$的一步梯度更新。</p>
+<p>这个式子的背后动机是，寻找一个架构$\alpha{k}$使得权重$ w{k}$在进行单步梯度下降后$L_{val}$会更低。这种优化方式采用的是Stackelberg game，但是没有收敛担保，只有实践证明。同时我们发现采用momentum梯度更新，我们的推论依旧是成立的。</p>
+<p>由上面的推断，我们可以得到构架a的梯度表示：</p>
+<script type="math/tex; mode=display">
+\nabla_{\alpha} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right)-\xi \nabla_{\alpha, w}^{2} \mathcal{L}_{t r a i n}(w, \alpha) \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right)</script><p>可以注意到第二项中有一个二次梯度，这一项的计算是极为复杂的，所幸微分是可以有近似操作的。</p>
+<script type="math/tex; mode=display">
+\nabla_{\alpha, w}^{2} \mathcal{L}_{t r a i n}(w, \alpha) \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right) \approx \frac{\nabla_{\alpha} \mathcal{L}_{t r a i n}\left(w^{+}, \alpha\right)-\nabla_{\alpha} \mathcal{L}_{t r a i n}\left(w^{-}, \alpha\right)}{2 \epsilon}</script><p>其中，有$w^{+}=w+\epsilon \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right)$和$w^{-}=w-\epsilon \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right)$。</p>
+<p>计算有限差分只需要两次权值前传和两次向后传递，复杂度从$\mathrm{O}(|\mathrm{a}||\mathrm{w}|)$降低为$\mathrm{O}(|\mathrm{a}|+|\mathrm{w}|)$。</p>
+<p>可以考虑一个特殊情况，学习率为0的时候，上式就变成了一个一阶近似。而$\alpha$的梯度则完全取决于前一项。这样的话，$\alpha$和$w$就相对独立了，但是这种情况下虽然速度有了提高，效果却下降的厉害。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6lwncmvj31m80u0hdt.jpg" alt></p>
+<h4 id="4-还原为离散网络结构"><a href="#4-还原为离散网络结构" class="headerlink" title="4. 还原为离散网络结构"></a>4. 还原为离散网络结构</h4><p>最后得到了架构的参数a，要将它还原为离散的网络构架，我们进行两步操作：</p>
 <ol>
-<li>Face Detection</li>
-<li>Super-resolution and Reﬁnement Network</li>
-<li>Generative Adversarial Networks</li>
+<li><p>为每个节点选取最强的k个预处理，这个k的选取依据以下公式。为了和其他网络结构保持可对比性，我们的卷积单元k=2，循环单元k=1。</p>
+<script type="math/tex; mode=display">
+\max _{o \in \mathcal{O}, o \neq z e r o} \frac{\exp \left(\alpha_{o}^{(i, j)}\right)}{\sum_{o^{\prime} \in \mathcal{O}} \exp \left(\alpha_{o^{\prime}}^{(i, j)}\right)}</script></li>
+<li><p>以argmax取代所有混合操作，成为最有可能的操作。</p>
+</li>
 </ol>
-<h3 id="FaceDetector"><a href="#FaceDetector" class="headerlink" title="FaceDetector"></a>FaceDetector</h3><p>现有的人脸检测方法大致可以分为手工制作的基于特征的方法和基于cnn的方法。</p>
-<p>此处介绍本文中作为基准的MB-FCN。</p>
-<p>MB-FCN：Multi-branch fully convolutional network，多分支人脸检测算法。具体做法是联合中间层feature map + 高层feature map特征，用于检测小尺度人脸，单模型的多分支检测，只需做单次前向预测即可检测图像中所有尺度的人脸，因为不用假定最小可检出人脸尺度，所以MB-FCN可以检出图像中所有尺度的人脸目标。</p>
-<p><img src="http://note.youdao.com/src/01E3DDB023D544CA92042AEF445AE3DD" alt="img"></p>
-<p>如fig 2，MB-FCN包含四个模块：</p>
+<p>以下为两个训练出来的结果：</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1k6p1emunj31240ki7jt.jpg" width="250," height="250"></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6ooqv18j30oq0w2als.jpg" width="250," height="250"></p>
+<h3 id="2-3-实验结果"><a href="#2-3-实验结果" class="headerlink" title="2.3 实验结果"></a>2.3 实验结果</h3><p>在这部分，具体的实验细节就不提供了，本文中在CIFAR-10数据集上进行CNN的cell训练。对于CNN网络，darts一共训练两种cell：normal cell和reduction cell。区别在于stride，前者为1，后者为2后再网络三分之一处和三分之二处。在Penn Treebank上训练RNN cell。只有一种单元。如下图显示，整个构架搜索是初始化敏感的，CNN cell经过长时间训练后能得到比较好的收敛，但是RNN cell的结果与初始化关系比较密切。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg" alt></p>
+<p>第二部分的评估，是将训练好的cell迁移到ImageNet或者WikiText-2上进行测试。在ImageNet上的效果是比较好的，而WikiText-2上的效果一般，可能原因是文本数据集差异过大。</p>
+<h2 id="第三部分-darts的改进方向"><a href="#第三部分-darts的改进方向" class="headerlink" title="第三部分 darts的改进方向"></a>第三部分 darts的改进方向</h2><p>在学习darts过程中想到的一些改进方向，与其他工作带来的启发。</p>
+<p>darts上有几个点是有待完善的</p>
 <ol>
-<li>共享的提特征主干网，本文使用ImageNet上预训练好的ResNet-50，图像经过主干网梭一把，就可以得到各层feature map啦；</li>
-<li>为每个分支，通过feature map的skip connection操作，concate不同分辨率的feature map，用于检测不同尺度的目标，结合fig 2，就是对不同分辨率的feature map使用到了上、下采样操作，使之尺度一致后再做concate；—- 这种融合多尺度feature map，single process检测不同尺度目标的方式，计算量肯定比使用图像金字塔，做multi process检测的方式，计算量小很多；</li>
-<li>对每个分支而言，通过FCN + multi-task学习的方式使各个分支用于特定尺度范围内的人脸；具体地，FCN先1 x 1 conv来一波以降低feature map的通道数，再接两个1 x 1 conv，输出reg、cls结果；</li>
-<li>得到每个分支的reg、cls结果，将结果转为包含得分的bbox，全局NMS一波，即得到最终结果；</li>
+<li>它的近似优化是简单的w更新后a更新，这个操作只是实践有效，但是应该是有改进的空间；</li>
+<li>它对于RNN cell 的初始化敏感是需要优化的</li>
+<li>现在的迁移学习就是简单的把cell运用到新的结构上，是否考虑添加distill，可能对于RNN这种表现一般的迁移有更好的效果。</li>
 </ol>
-<h3 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h3><p>在了解它的具体网络结构之前，我们先了解以下GAN。</p>
-<p>GAN也就是对抗生成网络，它通过一个对抗的国车给训练一个生成模型G。它包含两个网络，一个生成器G和一个鉴别器D。训练过程交替优化生成器G和鉴别器D，两者相互竞争。训练生成器器G产生样本欺骗鉴</p>
-<p>别器D，训练鉴别器D从生成器G器生成的样本和真样本中分辨真伪图像。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg" alt></p>
-<p>目标函数公式：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm7cnnbqj30f0018q33.jpg" alt></p>
-<p>具体过程：</p>
-<ul>
-<li>G是一个生成图片的网络，它接收一个随机的噪声z，通过这个噪声生成图片，记做G(z)。</li>
-<li>D是一个判别网络，判别一张图片是不是“真实的”。它的输入参数是x，x代表一张图片，输出D（x）代表x为真实图片的概率，如果为1，就代表100%是真实的图片，而输出为0，就代表不可能是真实的图片。</li>
-</ul>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>对于本篇论文，它的模型构建为：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm82ojk3j31f40ns1kx.jpg" alt></p>
-<p>首先，图像输入网络。</p>
-<p>第二步，以MB-FCN检测器作为基准，使用它来从输入图像中裁剪出阳性数据(即人脸)和阴性数据(即非人脸)，用于训练生成器和鉴别器，或者生成感兴趣区域(ROIs)进行测试。</p>
-<p>第三步，训练生成器从低分辨率输入图像中重建一个4倍上采样（也就是4<em>4提高到16</em>16）高分辨率图像。其中，先使用上采样子网络（upsample sub-network），以低分辨率图像作为输入，输出为超分辨率图像。再使用细化子网络（reﬁnement sub-network），这是因为第一步生成的图像是模糊的小人脸，缺乏精细的细节，而且受MSE loss的影响，产生的超分辨率人脸通常是模糊的。</p>
-<p>第四步，鉴别器网络为vgg19架构，具有两个并行的fc层，第一个fc层是对自然真实图像或生成的超分辨率图像进行区分，第二个fc层是对人脸或非人脸进行分类。</p>
-<p>三、四两步交替优化。</p>
-<p>具体的网络结构如下图：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm8qg49sj31dy0bkgom.jpg" alt></p>
-<p>生成器G中，我们不输入随机噪声，而是输入模糊的小脸。它的损失函数包括三部分，一部分是像素级的损失函数，一部分是对抗损失函数，另外移除了VGG的特征匹配损失换成。</p>
-<h2 id="思考与扩展建议"><a href="#思考与扩展建议" class="headerlink" title="思考与扩展建议"></a>思考与扩展建议</h2><p>本篇论文对于极小的人脸的检测有着比较好的实验效果，但同时，上采样的做法也导致部分非人脸的物体被误认为人脸。</p>
+<p>这个领域中，今后比较有意思的研究点包括： </p>
+<p>研究针对多任务和多目标问题的 NAS； </p>
+<p>研究更加灵活的搜索变量表示，类似 cell 这种方便进行迁移的表示方式； </p>
+<p>挖掘更多的、有难度的 benchmark； </p>
+<p>迁移学习的引入，进一步提高效率。 </p>
+<h2 id="第四部分-疑问"><a href="#第四部分-疑问" class="headerlink" title="第四部分 疑问"></a>第四部分 疑问</h2><ol>
+<li>为什么权值更新采用momentum梯度更新法？</li>
+</ol>
 
       
     </div>
@@ -566,9 +612,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/GAN/" rel="tag"><i class="fa fa-tag"></i> GAN</a>
+            <a href="/tags/darts/" rel="tag"><i class="fa fa-tag"></i> darts</a>
           
-            <a href="/tags/人脸检测/" rel="tag"><i class="fa fa-tag"></i> 人脸检测</a>
+            <a href="/tags/NAS/" rel="tag"><i class="fa fa-tag"></i> NAS</a>
+          
+            <a href="/tags/autoML/" rel="tag"><i class="fa fa-tag"></i> autoML</a>
+          
+            <a href="/tags/轻量化卷积/" rel="tag"><i class="fa fa-tag"></i> 轻量化卷积</a>
           
         </div>
       
@@ -581,15 +631,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/03/27/论文阅读-ShuffleNet/" rel="next" title="论文阅读- ShuffleNet">
+                <i class="fa fa-chevron-left"></i> 论文阅读- ShuffleNet
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/27/论文阅读-ShuffleNet/" rel="prev" title="论文阅读- ShuffleNet">
-                论文阅读- ShuffleNet <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -783,7 +833,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景与问题描述"><span class="nav-number">1.</span> <span class="nav-text">背景与问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法简介"><span class="nav-number">2.</span> <span class="nav-text">算法简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FaceDetector"><span class="nav-number">2.1.</span> <span class="nav-text">FaceDetector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GAN"><span class="nav-number">2.2.</span> <span class="nav-text">GAN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">3.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考与扩展建议"><span class="nav-number">4.</span> <span class="nav-text">思考与扩展建议</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分-什么是神经网络架构搜索"><span class="nav-number">1.</span> <span class="nav-text">第一部分 什么是神经网络架构搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-神经网络架构搜索（Neural-Architecture-Search）"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 神经网络架构搜索（Neural Architecture Search）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-主流架构搜索-不可微的“黑箱”优化"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 主流架构搜索-不可微的“黑箱”优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二部分-DARTS架构"><span class="nav-number">2.</span> <span class="nav-text">第二部分 DARTS架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-darts的整体构架"><span class="nav-number">2.1.</span> <span class="nav-text">2. 1 darts的整体构架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-优化策略与近似计算"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 优化策略与近似计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-将搜索空间可微化"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 将搜索空间可微化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-建模为双层优化问题"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 建模为双层优化问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-近似迭代优化：梯度下降"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. 近似迭代优化：梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-还原为离散网络结构"><span class="nav-number">2.2.4.</span> <span class="nav-text">4. 还原为离散网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-实验结果"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 实验结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三部分-darts的改进方向"><span class="nav-number">3.</span> <span class="nav-text">第三部分 darts的改进方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四部分-疑问"><span class="nav-number">4.</span> <span class="nav-text">第四部分 疑问</span></a></li></ol></div>
             
 
           </div>
@@ -1284,6 +1334,46 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
