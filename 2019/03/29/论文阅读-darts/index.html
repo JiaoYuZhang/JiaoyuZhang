@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1k6p1emunj31240ki7jt.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6ooqv18j30oq0w2als.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg">
-<meta property="og:updated_time" content="2019-03-29T17:47:26.625Z">
+<meta property="og:updated_time" content="2019-03-29T17:53:01.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-darts">
 <meta name="twitter:description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
@@ -449,7 +449,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-03-30 01:47:26" itemprop="dateModified" datetime="2019-03-30T01:47:26+08:00">2019-03-30</time>
+                <time title="Modified: 2019-03-30 01:53:01" itemprop="dateModified" datetime="2019-03-30T01:53:01+08:00">2019-03-30</time>
               
             
           </span>
@@ -574,19 +574,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
 <h3 id="2-3-实验结果"><a href="#2-3-实验结果" class="headerlink" title="2.3 实验结果"></a>2.3 实验结果</h3><p>在这部分，具体的实验细节就不提供了，本文中在CIFAR-10数据集上进行CNN的cell训练。对于CNN网络，darts一共训练两种cell：normal cell和reduction cell。区别在于stride，前者为1，后者为2后再网络三分之一处和三分之二处。在Penn Treebank上训练RNN cell。只有一种单元。如下图显示，整个构架搜索是初始化敏感的，CNN cell经过长时间训练后能得到比较好的收敛，但是RNN cell的结果与初始化关系比较密切。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg" alt></p>
 <p>第二部分的评估，是将训练好的cell迁移到ImageNet或者WikiText-2上进行测试。在ImageNet上的效果是比较好的，而WikiText-2上的效果一般，可能原因是文本数据集差异过大。</p>
-<h2 id="第三部分-darts的改进方向"><a href="#第三部分-darts的改进方向" class="headerlink" title="第三部分 darts的改进方向"></a>第三部分 darts的改进方向</h2><p>在学习darts过程中想到的一些改进方向，与其他工作带来的启发。</p>
-<p>darts上有几个点是有待完善的</p>
-<ol>
-<li>它的近似优化是简单的w更新后a更新，这个操作只是实践有效，但是应该是有改进的空间；</li>
-<li>它对于RNN cell 的初始化敏感是需要优化的</li>
-<li>现在的迁移学习就是简单的把cell运用到新的结构上，是否考虑添加distill，可能对于RNN这种表现一般的迁移有更好的效果。</li>
-</ol>
-<p>这个领域中，今后比较有意思的研究点包括： </p>
-<p>研究针对多任务和多目标问题的 NAS； </p>
-<p>研究更加灵活的搜索变量表示，类似 cell 这种方便进行迁移的表示方式； </p>
-<p>挖掘更多的、有难度的 benchmark； </p>
-<p>迁移学习的引入，进一步提高效率。 </p>
-<h2 id="第四部分-疑问"><a href="#第四部分-疑问" class="headerlink" title="第四部分 疑问"></a>第四部分 疑问</h2><ol>
+<h2 id="第三部分-疑问"><a href="#第三部分-疑问" class="headerlink" title="第三部分 疑问"></a>第三部分 疑问</h2><ol>
 <li>为什么权值更新采用momentum梯度更新法？</li>
 </ol>
 
@@ -833,7 +821,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分-什么是神经网络架构搜索"><span class="nav-number">1.</span> <span class="nav-text">第一部分 什么是神经网络架构搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-神经网络架构搜索（Neural-Architecture-Search）"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 神经网络架构搜索（Neural Architecture Search）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-主流架构搜索-不可微的“黑箱”优化"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 主流架构搜索-不可微的“黑箱”优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二部分-DARTS架构"><span class="nav-number">2.</span> <span class="nav-text">第二部分 DARTS架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-darts的整体构架"><span class="nav-number">2.1.</span> <span class="nav-text">2. 1 darts的整体构架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-优化策略与近似计算"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 优化策略与近似计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-将搜索空间可微化"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 将搜索空间可微化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-建模为双层优化问题"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 建模为双层优化问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-近似迭代优化：梯度下降"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. 近似迭代优化：梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-还原为离散网络结构"><span class="nav-number">2.2.4.</span> <span class="nav-text">4. 还原为离散网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-实验结果"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 实验结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三部分-darts的改进方向"><span class="nav-number">3.</span> <span class="nav-text">第三部分 darts的改进方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四部分-疑问"><span class="nav-number">4.</span> <span class="nav-text">第四部分 疑问</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分-什么是神经网络架构搜索"><span class="nav-number">1.</span> <span class="nav-text">第一部分 什么是神经网络架构搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-神经网络架构搜索（Neural-Architecture-Search）"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 神经网络架构搜索（Neural Architecture Search）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-主流架构搜索-不可微的“黑箱”优化"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 主流架构搜索-不可微的“黑箱”优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二部分-DARTS架构"><span class="nav-number">2.</span> <span class="nav-text">第二部分 DARTS架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-darts的整体构架"><span class="nav-number">2.1.</span> <span class="nav-text">2. 1 darts的整体构架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-优化策略与近似计算"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 优化策略与近似计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-将搜索空间可微化"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 将搜索空间可微化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-建模为双层优化问题"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 建模为双层优化问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-近似迭代优化：梯度下降"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. 近似迭代优化：梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-还原为离散网络结构"><span class="nav-number">2.2.4.</span> <span class="nav-text">4. 还原为离散网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-实验结果"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 实验结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三部分-疑问"><span class="nav-number">3.</span> <span class="nav-text">第三部分 疑问</span></a></li></ol></div>
             
 
           </div>
