@@ -501,7 +501,7 @@
 <li>提出了一种新的统一的端到端卷积神经网络人脸检测体系结构，利用超分辨率和细化网络生成真实、清晰的高分辨率图像，并引入鉴别器网络对人脸和非人脸进行分类。</li>
 <li>引入了一种新的丢包方法，使鉴别器网络能够同时分辨真假图像和真伪图像。更重要的是，分类损失用来引导生成网络生成更清晰的人脸，从而更容易分类。</li>
 </ol>
-<ol start="3">
+<ol>
 <li>最后，证明了提出的方法在从模糊的小人脸恢复清晰高分辨率人脸方面的有效性，并证明了该检测方法在较宽的人脸数据集上，特别是在最具挑战性的硬子集上，其检测性能优于其他最先进的方法。</li>
 </ol>
 <h2 id="算法简介"><a href="#算法简介" class="headerlink" title="算法简介"></a>算法简介</h2><p>本篇论文中，一共使用了三方面的技术：</p>
@@ -517,7 +517,7 @@
 <p>如fig 2，MB-FCN包含四个模块：</p>
 <ol>
 <li>共享的提特征主干网，本文使用ImageNet上预训练好的ResNet-50，图像经过主干网梭一把，就可以得到各层feature map啦；</li>
-<li>为每个分支，通过feature map的skip connection操作，concate不同分辨率的feature map，用于检测不同尺度的目标，结合fig 2，就是对不同分辨率的feature map使用到了上、下采样操作，使之尺度一致后再做concate；—- 这种融合多尺度feature map，single process检测不同尺度目标的方式，计算量肯定比使用图像金字塔，做multi process检测的方式，计算量小很多；</li>
+<li>为每个分支，通过feature map的skip connection操作，concate不同分辨率的feature map，用于检测不同尺度的目标，结合fig 2，就是对不同分辨率的feature map使用到了上、下采样操作，使之尺度一致后再做concate；—— 这种融合多尺度feature map，single process检测不同尺度目标的方式，计算量肯定比使用图像金字塔，做multi process检测的方式，计算量小很多；</li>
 <li>对每个分支而言，通过FCN + multi-task学习的方式使各个分支用于特定尺度范围内的人脸；具体地，FCN先1 x 1 conv来一波以降低feature map的通道数，再接两个1 x 1 conv，输出reg、cls结果；</li>
 <li>得到每个分支的reg、cls结果，将结果转为包含得分的bbox，全局NMS一波，即得到最终结果；</li>
 </ol>
