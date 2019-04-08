@@ -103,25 +103,26 @@
 
 
 
-  <meta name="description" content="ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）">
+  <meta name="description" content="现在的网络结构的衡量通常通过不直接的衡量标准像FLOPS等，但是直接衡量标准比如速度其实取决于很多其他原因，内存访问成本和平台因素都有很大关系。本文的工作就是直接在目标平台衡量直接标准速度，而不仅仅是考虑FLOPS。基于一系列对照实验，本文给出了一些设计效率网络的建议。本文也给出了一个新的网络结构ShuffleNetV2。完全的消融实验证实了本文的模型是截止目前最优秀的速度与准确率的结合。">
 <meta name="keywords" content="轻量化卷积,dw convolution,group convolution">
 <meta property="og:type" content="article">
-<meta property="og:title" content="论文阅读- ShuffleNet">
-<meta property="og:url" content="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-ShuffleNet copy/index.html">
+<meta property="og:title" content="论文阅读-ShuffleNetV2">
+<meta property="og:url" content="https://jiaoyuzhang.github.io/2019/04/08/论文阅读-ShuffleNetV2/index.html">
 <meta property="og:site_name" content="Joey&#39;s Notes">
-<meta property="og:description" content="ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）">
+<meta property="og:description" content="现在的网络结构的衡量通常通过不直接的衡量标准像FLOPS等，但是直接衡量标准比如速度其实取决于很多其他原因，内存访问成本和平台因素都有很大关系。本文的工作就是直接在目标平台衡量直接标准速度，而不仅仅是考虑FLOPS。基于一系列对照实验，本文给出了一些设计效率网络的建议。本文也给出了一个新的网络结构ShuffleNetV2。完全的消融实验证实了本文的模型是截止目前最优秀的速度与准确率的结合。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho2vtyw2j31ec0luq8i.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho49a3edj31dw0mswkf.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho4wt4yfj31dw0kqafi.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho5f4ukqj310k0940v0.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho5yasjzj310q0c2add.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho6hbpczj314y0u0gxd.jpg">
-<meta property="og:updated_time" content="2019-03-27T13:39:24.460Z">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g1uz7f50v3j313k0tgn5o.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g1uz8k3px4j314i0fu13l.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g1uzdt1226j314o0cejuw.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0nb82c0j314c0cegoo.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0of9uk2j313q0osn30.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g1v0qpb07cj314g0muq8c.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g1v0rpffvjj314i0fujwf.jpg">
+<meta property="og:updated_time" content="2019-04-08T03:11:49.970Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="论文阅读- ShuffleNet">
-<meta name="twitter:description" content="ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）">
-<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho2vtyw2j31ec0luq8i.jpg">
+<meta name="twitter:title" content="论文阅读-ShuffleNetV2">
+<meta name="twitter:description" content="现在的网络结构的衡量通常通过不直接的衡量标准像FLOPS等，但是直接衡量标准比如速度其实取决于很多其他原因，内存访问成本和平台因素都有很大关系。本文的工作就是直接在目标平台衡量直接标准速度，而不仅仅是考虑FLOPS。基于一系列对照实验，本文给出了一些设计效率网络的建议。本文也给出了一个新的网络结构ShuffleNetV2。完全的消融实验证实了本文的模型是截止目前最优秀的速度与准确率的结合。">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g1uz7f50v3j313k0tgn5o.jpg">
 
 
 
@@ -130,7 +131,7 @@
 
 
 
-  <link rel="canonical" href="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-ShuffleNet copy/">
+  <link rel="canonical" href="https://jiaoyuzhang.github.io/2019/04/08/论文阅读-ShuffleNetV2/">
 
 
 
@@ -140,7 +141,7 @@
   };
 </script>
 
-  <title>论文阅读- ShuffleNet | Joey's Notes</title>
+  <title>论文阅读-ShuffleNetV2 | Joey's Notes</title>
   
 
 
@@ -385,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jiaoyuzhang.github.io/2019/03/27/论文阅读-ShuffleNet copy/">
+    <link itemprop="mainEntityOfPage" href="https://jiaoyuzhang.github.io/2019/04/08/论文阅读-ShuffleNetV2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Joey Zhang">
@@ -402,7 +403,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">论文阅读- ShuffleNet
+          <h1 class="post-title" itemprop="name headline">论文阅读-ShuffleNetV2
 
               
             
@@ -428,7 +429,7 @@
                 
               
 
-              <time title="Created: 2019-03-27 21:33:49 / Modified: 21:39:24" itemprop="dateCreated datePublished" datetime="2019-03-27T21:33:49+08:00">2019-03-27</time>
+              <time title="Created: 2019-04-08 10:39:10 / Modified: 11:11:49" itemprop="dateCreated datePublished" datetime="2019-04-08T10:39:10+08:00">2019-04-08</time>
             
 
             
@@ -471,7 +472,7 @@
           
 
           
-            <div class="post-description">ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）。在ARM-based移动设备上，它和AlexNet准确率可比较的同时速度快上13倍。</div>
+            <div class="post-description">现在的网络结构的衡量通常通过不直接的衡量标准像FLOPS等，但是直接衡量标准比如速度其实取决于很多其他原因，内存访问成本和平台因素都有很大关系。本文的工作就是直接在目标平台衡量直接标准速度，而不仅仅是考虑FLOPS。基于一系列对照实验，本文给出了一些设计效率网络的建议。本文也给出了一个新的网络结构ShuffleNetV2。完全的消融实验证实了本文的模型是截止目前最优秀的速度与准确率的结合。</div>
           
 
         </div>
@@ -487,38 +488,47 @@
       
 
       
-        <p>论文标题：ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices 【<a href="https://arxiv.org/pdf/1707.01083.pdf" target="_blank" rel="noopener">pdf</a>】</p>
-<p>作者：Xiangyu Zhang∗ Xinyu Zhou∗ Mengxiao Lin Jian Sun</p>
-<p>旷视的轻量化卷积网络。</p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>ShuffleNet：能够应用于移动场景的轻量级应用。它的操作限制在10-150MFLOPs。</p>
-<p>这个新结构采用了两种新结构：pointwise group convolution（点群卷积）和channel shuffle（打乱通道）。</p>
-<p>实验采用了ImageNet分类问题和COCO上的目标检测问题，在算力限制40MFLOPs它相比于mobilenetv1在分类问题上有更低的top-1错误率（7.8%）。在ARM-based移动设备上，它和AlexNet准确率可比较的同时速度快上13倍。</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>现阶段在解决视觉识别任务时构建更深更大的卷积网络是大势。本文则追求在有限运算次数中追求更高准确率。现有的轻量级模型聚焦在剪枝（pruning）、挤压（compressing）或者低位（low-bit）一个基础神经网络。</p>
-<p>本文注意到标准基础结构比如Xception、ResNeXt由于1<em>1卷积层的巨大消耗在小型网络中表现低效。本文采用pointwise group convolution（PGC）来减少1</em>1卷积层的计算复杂性。为了克服PGC带来的边际效应，本文使用channel shulffle来得到信息在特征层之间流动。</p>
-<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>有效的模型设计。GoogleNet在更少复杂性下加深了网络深度。SqueezeNet在准确率维持的同时减少了参数和计算。ResNet使用了bottleneck结构。SENet引入了一个表现良好的轻量级计算的结构单元。</p>
-<p><strong>Group Convolution。</strong>组卷积的概念一开始是AlexNet为了在两个GPU上计算而提出的，在ResNeXt中显示出了它的效率。Depthwise separable convolution在Xception中被使用。最近的MobileNet使用可分卷积在轻量级模型上取得了最先进的结果。本文以全新的形式使用了组卷积和可分卷积。</p>
-<p><strong>Channel Shuffle Operation。</strong>据我们所知，通道洗牌操作之前很少在效率模型中被使用。CNN库cuda-convnet中支持“任意可分卷积”层，在组卷积中等同于任意通道洗牌。但是这样的任意洗牌操作的目的不同，后来也很少被用到。最近，另一个网络也在两阶段卷积中采用了这一创意，但是它没有发现通道洗牌的作用，也没有把它用于小型网络设计。</p>
-<p><strong>模型加速。</strong>模型加速是要在准确保持的情况下加速前向网络（inference）。剪枝网络在保持表现的同时减去了预训练模型的冗余链接。量化和因式分解的目的都是减去冗余计算来加速前向网络。实践中还有利用FFT加速CNN卷积计算。另外，Distilling（蒸馏）将大模型的信息提取到小模型中，使得训练小模型更为简单。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="组卷积中使用通道洗牌"><a href="#组卷积中使用通道洗牌" class="headerlink" title="组卷积中使用通道洗牌"></a>组卷积中使用通道洗牌</h3><p>​    现代卷积网络中通常由重复法人相同结构的构建块组成。其中，目前最为优秀的Xception或ResNeXt在构建块中引入可分卷积或者组卷积，以此来取得可靠能力和计算代价间的完美平衡。然而，本文 注意到它们都没有完整考虑点卷积的开销。比如，ResNeXt中只有3*3层使用了组卷积。结果是在ResNeXt的每个残差单元中点卷积占了93.4%的multiplication-adds操作。在小网络中，昂贵的点卷积导致了通道数受到复杂度的限制，这一点对准确度的降低有显著影响。</p>
-<p>为解决这一问题，一个直接的方法是在点卷积上使用通道可分连接（比如组卷积）。通过确保每次卷积操作只作用在对应的输入通道组上，组卷积显著地减少了计算代价。但是，多次组卷积堆叠在一起会产生边际效应：某一特定通道的输出只来源于输入通道的一部分。图1.a展示了两个堆叠的租卷积层。很显然特定组的输出只相关于组内输入，它使得通道组的信息流被固定在组内，削弱了代表性。</p>
-<p>如果我们让组卷积从不同组间获得输入信息，输入通道和输出通道就会充分相关（图1.b）。特别地，对于上一个组层产生的特征图，我们可以先在组内将通道再次分为子组，再在下一层在组中喂入不同的子组。这一步可以通过通道洗牌（图1. c）高效优雅地完成：假设一个g组的卷积层，它的输出有g*n个通道，我们先将输出通道reshape成（g，n）矩阵，将矩阵<strong>转置</strong>后再拉平。注意，即便两个卷积层组数不同这一步依然有效。另外，通道洗牌是可微的，这意味着它可以被嵌入经段对端训练的网络结构中。</p>
-<p>通道洗牌使得利用多重组卷积构建更强力的网络变为可能。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho2vtyw2j31ec0luq8i.jpg" alt></p>
-<h3 id="ShuffleNet-Unit"><a href="#ShuffleNet-Unit" class="headerlink" title="ShuffleNet Unit"></a>ShuffleNet Unit</h3><p>利用通道洗牌，本文构建了特别为小型网络设计的全新的ShuffleNet单元。先介绍图2.a中的瓶颈单元设计原则。它是一个残差块（residual block）。在它的残差分支中，本文用计算经济的3<em>3可分卷积来替换3</em>3卷积。然后，本文将第一个点卷积层用点组卷积代替，再接了一个通道洗牌，这就形成了一个ShuffleNet单元（图2.b）。第二个点组卷积的作用是重新覆盖通道维度来适应残差捷径。为简化操作，第二个点组卷积后没有再接通道洗牌，结果也是可以接受的。Batch normalization和非线性化操作都相似于标准残差网络，但是在可分卷积后我们没有使用ReLU。鉴于ShuffleNet可能会和stride一起使用，我们在图2.c做了简单的两个改变：1.在捷径后加了一个3*3平均池化层2.用通道连接concat替换element-wise addition，使得扩发通道维数的操作计算更简单。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho49a3edj31dw0mswkf.jpg" alt></p>
-<p>相较于ResNet和ResNeXt，我们的模型在相同配置下计算更简便。比如，输入为c<em>h</em>w，瓶颈层通道数为m，那么ResNet需要hw（2cm+9m^2）FLOPS，ResNeXt需要hw（2cm+9m^2/g）FLOPS，但是ShuffleNet需要hw（2cm/g+9m）FLOPS，g表示组数。这意味着，同样的计算预算，ShuffleNet可以使用更宽的特征图。</p>
-<p>另外，ShuffleNet只在瓶颈层使用可分卷积。尽管可分卷积在理论上复杂度很低，本文发现在低能量移动设备很难效率实现，导致计算/内存可获得比例比其他维度操作低很多。这个缺点在Xception中也被提及。在ShuffleNet单元，我们只在瓶颈处使用可分卷积。</p>
-<h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p>整个网络结构构件在ShuffleNet单元上，在表格1中完整展示。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho4wt4yfj31dw0kqafi.jpg" alt></p>
-<p>网络结构中主要包含了三个阶段的ShuffleNet单元。每个阶段的第一个构建块是步长为2的，其他参数在一层中保持不变，进入下一层时输出通道数为变为2倍。类似于ResNet，本文在每个ShuffleNet单元设置瓶颈通道数为输出通道数的1/4。本文意在提供最为简单的偏好设计，但是也发现经过调参结果会更好。</p>
-<p>在ShuffleNet单元中，组数g控制着点卷积的稀疏度。表格1中显示了不同的g，我们调整了输出通道数来保持计算代价基本不变（~140MFLOPS）。显然，组数越大输出通道数越多（更多的卷积过滤器），也就能编码更多的信息，但是它也意味着每个单独的卷积过滤器因为相关输入通道变少而退化。</p>
-<p>为了使网络结构达到预计的复杂度，我们简单在通道数上应用了一个尺度参数s。</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>本文的实验主要在ImageNet2012上进行。实验细节在此不做赘述。</p>
-<p>在ImageNet2012上得实验结果为：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1ho5f4ukqj310k0940v0.jpg" alt>采用通道洗牌的方式与不采用通道洗牌的不同结果：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho5yasjzj310q0c2add.jpg" alt><br>它与其他压缩模型的对比：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ho6hbpczj314y0u0gxd.jpg" alt></p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这篇论文模型压缩的主要起作用的piontwise group convolution，然后channel Shuffle提供了5%的错误率改善。</p>
+        <p>论文：ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design【<a href="http://openaccess.thecvf.com/content_ECCV_2018/papers/Ningning_Light-weight_CNN_Architecture_ECCV_2018_paper.pdf" target="_blank" rel="noopener">dpf</a>】</p>
+<p>作者：<strong>Ningning Ma, Xiangyu Zhang, Hai-Tao Zheng, Jian Sun</strong>; </p>
+<p>2018.7</p>
+<h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>轻量化模型比较好的几个模型：Xception [12], MobileNet [13], MobileNet V2 [14], ShuffleNet [15], and CondenseNet [16]。</p>
+<p>关于衡量标准，通常使用的是非直接标准FLOPS（浮点操作数），但是FLOPS并不一定决定直接标准speed和latency。比如MobileNetV2和NASNET-A有相似的FLOPS，但是MobileNetV2速度更快。具体的差距在图1中。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g1uz7f50v3j313k0tgn5o.jpg" alt></p>
+<p>造成FLOPS与speed不同步的主要原因有两个：</p>
+<p>1.没考虑一些影响速度的额外因素，memory access cost（MAC）和并行度。MAC是算力强大的GPU的瓶颈。并行化程度越深，相同FLOPS的运算速度越快。</p>
+<p>2.相同FLOPS的操作在不同的平台的运行时间是不同的。比如，张量分解在最近的一些工作中用来分解矩阵乘法，但是最近研究表明分解操作虽然减少了75%的FLOPS但会在GPU上更慢。我们调查了这一现象，发现原因是最新的CUDNN库为3<em>3卷积特别进行了优化。我们不能再简单认为3</em>3卷积就是比1*1卷积慢了9倍。</p>
+<p>基于以上的观察，本文认为在设计效率模型时必须考虑两个原则：1.采用直接标准取代FLOPS 2.应该在同一平台衡量直接标准。</p>
+<h2 id="二-效率网络设计的实践指导"><a href="#二-效率网络设计的实践指导" class="headerlink" title="二 效率网络设计的实践指导"></a>二 效率网络设计的实践指导</h2><p>本文的研究都是基于两个广泛使用的平台，使用的是工业级优化过的CNN库。本文的CNN库是比其他开源CNN库更高效的。</p>
+<p>GPU平台使用的是一台1080Ti，卷积库使用CUDNN7.0。我们也激活了SUDNN的benchmarking功能来选择不同卷积操作的最快实现算法。</p>
+<p>ARM平台使用一块高通骁龙810。本文采用了基于NEON的高优化实现方案。测试集使用单线程。</p>
+<p>其他设置包括：开启全优化操作（使用tensor fusion）。输入图像大小224*224.每个网络都是任意初始化，测试了100次，采用平均时间。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g1uz8k3px4j314i0fu13l.jpg" alt></p>
+<p>在图2中，本文比较了ShuffleNetV1和MobileNetV2在不同平台上的操作时间占比其实是不同的。FLOPS只考虑了卷积操作部分。虽然卷积操作占比为主要，但是数据传输、数据打乱和元素级操作（张量加、ReLU等）也占据了相当比分的时间。</p>
+<p><strong>G1) Equal channel width minimizes memory access cost (MAC).</strong>相等的通道宽度能最小化内存访问代价。现代网络结构通常会采用深度可分卷积，其中点卷积构成了最大的复杂度。仔细研究点卷积的核的形状。它由两个参数决定：输入通道数$c_1$和输出通道数$c_2$。$h$和$w$表示特征图的空间尺寸，那么点卷积的FLOPS就为$B=hwc_1c_2$.</p>
+<p>为了简化说明，这里假设计算设备的cache足够大到存储整个feature maps和参数。那么，访存操作数就是$MAC = hw（c_1+c_2）+c_1c_2$.两个变量特别相关于访存，是input/output feature maps and kernel weights。对应不等式：</p>
+<script type="math/tex; mode=display">
+\mathrm{MAC} \geq 2 \sqrt{h w B}+\frac{B}{h w}</script><p>由此可见，MAC有FLOPS一个很低的关联，当输入输出通道数相等时它的相关度会更低。</p>
+<p>这是一个理论化的结果。实践中，很多设备的闪存根本不够大。还有其他计算设计问题，因此我们直接设计了一个对比试验。一个网络结构由十个构建块堆叠成。每块包含两个卷积层。在保证FLOPS的前提下，我们调整$c_1$与$c_2$的比例，结果如表1.</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1uzdt1226j314o0cejuw.jpg" alt></p>
+<p><strong>G2) Excessive group convolution increases MAC.</strong>过多的组卷积会增加MAC。群卷积是现代网络结构的核心[7,15,25,26,27,28]。它通过将所有通道之间的密集卷积变为稀疏(仅在通道组内)来降低计算复杂度(FLOPs)。一方面，它允许在给定固定故障的情况下使用更多的通道，并增加了网络容量(从而提高了准确性)。然而，另一方面，频道数量的增加导致更多的MAC。</p>
+<p>基于G1的推导，在1*1的点卷积中的MAC与FLOPs的关系为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathrm{MAC} &=h w\left(c_{1}+c_{2}\right)+\frac{c_{1} c_{2}}{g} \\ &=h w c_{1}+\frac{B g}{c_{1}}+\frac{B}{h w} \end{aligned}</script><p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0nb82c0j314c0cegoo.jpg" alt></p>
+<p>因此，我们建议，组数应该基于平台和任务慎重选择。仅仅只为了更多的通道数而用更大的组数是不理智的，因为准确的增长可能比不过为此付出的计算代价的增长。</p>
+<p><strong>G3) Network fragmentation reduces degree of parallelism.</strong>网络碎片会减少并行度。</p>
+<p>碎片化操作对于准确率有提高，但是对高并行化设备比如GPU不友好。</p>
+<p><strong>G4) Element-wise operations are non-negligible.</strong>元素级操作不可忽略。</p>
+<h2 id="三-ShuffleNet-V2"><a href="#三-ShuffleNet-V2" class="headerlink" title="三 ShuffleNet V2"></a>三 ShuffleNet V2</h2><p>对于ShuffleNet v1中的组点卷积和瓶颈结构都会增加MAC，而且对于轻量级模型是不可忽略的。为了改善上述问题，本文提出了Channel Split。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0of9uk2j313q0osn30.jpg" alt></p>
+<p>也就是在每个单元的开头将输入的c个通道分割成两个分支，一个为$c-c^`$，另一个有$c^`$个通道。遵循G3，左边的分支保持了恒等。而右边的分支保证了输入输出通道数的相同满足G1。两个点卷积操作不再进行组卷积，一方面为了遵循G2，另一方面通道分割已经分出了两组。</p>
+<p>在卷积完成后，两个分支直接进行拼接。拼接完成后，再进行channel shuffle。之后就接下一个单元，不再进行ShuffleNetV1中的ADD操作。元素操作比如ReLU和可分卷积只存在在一个分支中。另外拼接、通道洗牌、通道分割都合并为一个单一的元素操作。</p>
+<p>为了做空间下采样，单元也被做了简单的修改如图3.d。这里得$c^`$为了方便直接设为c的一半，ShuffleNet V2的最后结构如表格5.</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g1v0qpb07cj314g0muq8c.jpg" alt></p>
+<p>与ShuffleNet V1整体结构唯一不同的是，在全局平均池化层之前添加了一个点卷积层来混合通道。</p>
+<p>对于ShuffleNet V2的分析，首先高效性使得每个构建块都能使用更多的特征通道。其次，一半通道直接进入下一个构建块可以视为某种程度的feature reuse。</p>
+<h2 id="四-实验"><a href="#四-实验" class="headerlink" title="四 实验"></a>四 实验</h2><p>在COCO数据集上，基础框架是Light-Head RCNN。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g1v0rpffvjj314i0fujwf.jpg" alt></p>
+<h2 id="五-总结"><a href="#五-总结" class="headerlink" title="五 总结"></a>五 总结</h2><p>本文建议网络架构设计应考虑速度等直接指标，而不是FLOPs等间接指标。我们提出了实用的指导方针和一个新的架构，ShuffleNet v2。综合实验验证了该模型的有效性。</p>
 
       
     </div>
@@ -559,8 +569,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/27/论文阅读-TinyGAN/" rel="next" title="论文阅读-TinyFace GAN">
-                <i class="fa fa-chevron-left"></i> 论文阅读-TinyFace GAN
+              <a href="/2019/03/29/论文阅读-darts/" rel="next" title="论文阅读-darts">
+                <i class="fa fa-chevron-left"></i> 论文阅读-darts
               </a>
             
           </div>
@@ -588,6 +598,11 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzQ3NS8yMDAxNQ=="></div>
+    </div>
 
   
 
@@ -638,7 +653,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -659,7 +674,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -682,7 +699,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
@@ -753,7 +776,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工作"><span class="nav-number">3.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">4.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组卷积中使用通道洗牌"><span class="nav-number">4.1.</span> <span class="nav-text">组卷积中使用通道洗牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ShuffleNet-Unit"><span class="nav-number">4.2.</span> <span class="nav-text">ShuffleNet Unit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络结构"><span class="nav-number">4.3.</span> <span class="nav-text">网络结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">5.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-简介"><span class="nav-number">1.</span> <span class="nav-text">一 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-效率网络设计的实践指导"><span class="nav-number">2.</span> <span class="nav-text">二 效率网络设计的实践指导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-ShuffleNet-V2"><span class="nav-number">3.</span> <span class="nav-text">三 ShuffleNet V2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-实验"><span class="nav-number">4.</span> <span class="nav-text">四 实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-总结"><span class="nav-number">5.</span> <span class="nav-text">五 总结</span></a></li></ol></div>
             
 
           </div>
@@ -774,7 +797,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -786,6 +811,17 @@
 </div>
 
 
+<div class="word-count">
+  <i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+  <span class="post-meta-divider">|</span>
+
+  <span class="post-count">博客全站共6.6k字</span>
+</div>
+
+
+
   <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
 
 
@@ -795,6 +831,7 @@
 
 
   <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
 
 
 
@@ -915,6 +952,21 @@
 
   
 
+
+  
+    <script>
+  window.livereOptions = {
+    refer: '2019/04/08/论文阅读-ShuffleNetV2/'
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
 
   
 
@@ -1249,6 +1301,13 @@
   
 
   
+  
+
+  
+  
+
+  
+
 
   
 
