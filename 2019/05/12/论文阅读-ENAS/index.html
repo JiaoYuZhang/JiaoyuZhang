@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。最关键是利用子模型之间共享参数，大大减少了训练时长。">
+<meta name="keywords" content="Google Brain,ENAS,weight sharing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读-ENAS">
+<meta property="og:url" content="https://jiaoyuzhang.github.io/2019/05/12/论文阅读-ENAS/index.html">
+<meta property="og:site_name" content="Joey&#39;s Notes">
+<meta property="og:description" content="在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。最关键是利用子模型之间共享参数，大大减少了训练时长。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g34ca8i909j30bk062jrn.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g34en57kvbj30f505ft96.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g34eqkxei5j30g204v3yt.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g34gb378icj30fr0aemyh.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g34gi5nw3bj30g103xdg0.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g34girofugj30ga053jry.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g36o1yolgqj308f0bg3yx.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g36mbgiy7yj30sc0b4n01.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g34gt7rwbhj30yn0kwdmf.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36mama6vej30dy0mndhq.jpg">
+<meta property="og:updated_time" content="2019-05-19T14:08:56.587Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文阅读-ENAS">
+<meta name="twitter:description" content="在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。最关键是利用子模型之间共享参数，大大减少了训练时长。">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g34ca8i909j30bk062jrn.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Joey's Notes" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://jiaoyuzhang.github.io/2019/05/12/论文阅读-ENAS/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>论文阅读-ENAS | Joey's Notes</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Joey's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jiaoyuzhang.github.io/2019/05/12/论文阅读-ENAS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Joey Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文阅读-ENAS
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-12 13:37:48" itemprop="dateCreated datePublished" datetime="2019-05-12T13:37:48+08:00">2019-05-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-19 22:08:56" itemprop="dateModified" datetime="2019-05-19T22:08:56+08:00">2019-05-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NAS/" itemprop="url" rel="index"><span itemprop="name">NAS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            <div class="post-description">在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。最关键是利用子模型之间共享参数，大大减少了训练时长。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>论文：Efficient Neural Architecture Search via Parameter Sharing  【<a href="https://arxiv.org/abs/1802.03268" target="_blank" rel="noopener">pdf</a>】【<a href="https://github.com/melodyguan/enas" target="_blank" rel="noopener">code-tf</a>】【<a href="https://github.com/carpedm20/ENAS-pytorch" target="_blank" rel="noopener">code-python</a>】</p>
+<p>作者：<a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Pham%2C+H" target="_blank" rel="noopener">Hieu Pham</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Guan%2C+M+Y" target="_blank" rel="noopener">Melody Y. Guan</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Zoph%2C+B" target="_blank" rel="noopener">Barret Zoph</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Le%2C+Q+V" target="_blank" rel="noopener">Quoc V. Le</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Dean%2C+J" target="_blank" rel="noopener">Jeff Dean</a></p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。</p>
+<p><strong>最关键是利用子模型之间共享参数，大大减少了训练时长。</strong></p>
+<h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>这项工作的主要贡献是通过强制所有子模型共享权重来提高NAS的效率，从而避免从零开始到收敛对每个子模型进行训练。这个想法有明显的并发症,为不同的子模型可能利用他们的权重不同,但被以前的工作鼓励转移学习和多任务学习,证实为一个特定的模型参数学习的一项特殊的任务可以用于其他模型对其他任务。</p>
+<p>我们的经验表明，不仅在子模型之间共享参数是可能的，而且它还允许非常强大的性能。具体来说，在CIFAR-10上，我们的方法的测试误差为2.89%，而NAS的测试误差为2.65%。在Penn Treebank上，我们的方法实现了一个测试perplexity为55.8，显著优于NAS的测试perplexity为62.4 (Zoph &amp; Le, 2017)，这是Penn Treebank不使用训练后处理的方法中一个新的最先进的方法。重要的是，在我们所有的实验中，我们使用一个Nvidia GTX 1080Ti GPU，搜索架构花费不到16个小时。与NAS相比，这减少了超过1000倍的gpu小时。由于其有效性，我们将我们的方法命名为高效神经结构搜索(ENAS)。</p>
+<h2 id="二-方法"><a href="#二-方法" class="headerlink" title="二 方法"></a>二 方法</h2><p>ENAS的核心思想是观察到NAS最终遍历的所有图都可以看作是更大图的子图。换句话说，我们可以使用一个有向无环图(DAG)来表示NAS的搜索空间。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g34ca8i909j30bk062jrn.jpg" alt></p>
+<p>直观地说，ENAS的DAG是NAS搜索空间中所有可能的子模型的叠加，其中节点表示本地计算，边缘表示信息流。每个节点上的本地计算都有自己的参数，只有在激活特定的计算时才使用这些参数。因此，ENAS的设计允许在搜索空间中的所有子模型(即架构)之间共享参数。</p>
+<h3 id="2-1-RNN中的cell设计"><a href="#2-1-RNN中的cell设计" class="headerlink" title="2.1 RNN中的cell设计"></a>2.1 RNN中的cell设计</h3><p>对于RNN cell的设计，ENAS不同于NAS。NAS将cell架构的拓扑固定为二叉树，只学习树中每个节点的操作。ENAS则被允许在RNN cell中设计拓扑和操作，因此更加灵活。</p>
+<p>ENAS使用了一个包含N个节点的DAG，其中Node表示本地计算，Edge表示N个节点之间的信息流。<strong>ENAS的控制器是一个RNN，它决定:1)哪些边被激活，2)在DAG中的每个节点上执行哪些计算。</strong></p>
+<p>为了创建一个循环单元，控制器RNN对N个决策块进行采样。这里我们通过一个简单的例子说明ENAS机制，N = 4个竞争节点的循环细胞(如图1所示)，设x_t为循环细胞的输入信号(如word embedding)，h_t - 1为前一个时间步的输出。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g34en57kvbj30f505ft96.jpg" alt></p>
+<ol>
+<li><p>在节点1: 控制器首先采样一个激活函数。在本例中，控制器选择tanh激活函数，这意味着RNN的节点1应该计算$h_{1}=\tanh \left(\mathbf{x}_{t} \cdot \mathbf{W}^{(\mathbf{x})}+\mathbf{h}_{t-1} \cdot \mathbf{W}_{1}^{(\mathbf{h})}\right)$</p>
+</li>
+<li><p>在节点2: 控制器然后对之前的索引和激活函数进行采样。在我们的示例中，它选择前面的index 1和激活函数ReLU。Node 2计算$h_{2}=\operatorname{ReLU}\left(h_{1} \cdot \mathbf{W}_{2,1}^{(\mathbf{h})}\right)$</p>
+</li>
+<li><p>在节点3:控制器再次采样之前的索引和激活函数。在我们的示例中，它选择前面的index 2和激活函数ReLU。Node3 可以表示从$h_{3}=\operatorname{ReLU}\left(h_{2} \cdot \mathbf{W}_{3,2}^{(\mathbf{h})}\right)$</p>
+</li>
+<li><p>在节点4:控制器再次采样之前的索引和激活函数。在我们的例子中，它选择前面的index 1和激活函数tanh，得到$h_{4}=\tanh \left(h_{1} \cdot \mathbf{W}_{4,1}^{(\mathbf{h})}\right)$</p>
+</li>
+<li><p>对于输出，我们简单地将所有未被选中的节点平均为所有其他节点的输入。在我们的示例中，由于索引3和索引4从未被采样为任何节点的输入，所以RNN使用它们的平均值(h3 + h4)/2作为输出。也就是说，$h_t = (h_3 + h_4)/2$。</p>
+</li>
+</ol>
+<p>在上面的示例中,对于每一对节点$j &lt;ℓ$,有一个独立的参数matrix$W^{(h)}_{ℓ, j}$。如示例所示，通过选择前面的索引，控制器还可以决定使用哪个参数矩阵。因此，在ENAS中，搜索空间中的所有复发细胞共享相同的一组参数。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g34eqkxei5j30g204v3yt.jpg" alt></p>
+<p>我们的搜索空间包含指数级的构型。具体来说，如果RNN的cell有N个节点，并且我们允许4个激活函数(即tanh、ReLU、identity和sigmoid)，那么搜索空间就是4^N×N!配置。在我们的实验中，N = 12，这意味着在我们的搜索空间中大约有10^15个模型。</p>
+<h3 id="2-2-培训ENAS并派生体系结构"><a href="#2-2-培训ENAS并派生体系结构" class="headerlink" title="2.2 培训ENAS并派生体系结构"></a>2.2 培训ENAS并派生体系结构</h3><p>ENAS控制器网络是一个拥有100个隐藏单元的LSTM (Hochreiter &amp; Schmidhuber, 1997)。这个LSTM通过softmax分类器以自回归的方式对决策进行采样:将上一步中的决策作为嵌入到下一步的输入提供。在第一步，控制器网络接收一个空嵌入作为输入。</p>
+<p>在ENAS,有两套可学的参数:控制器LSTM的参数θ,和子模型的共享参数ω。ENAS的培训过程包括两个交叉阶段。</p>
+<ul>
+<li><p>第一阶段通过一整个训练集训练子模型共享参数w。在本文的Penn Treebank实验中，ω是训练大约400 steps,每个minibatch使用64个样本,采用梯度反向传播+梯度截断（<strong>Truncated Gradient</strong>）进行优化，每隔35 steps进行一次隔断。同时,在CIFAR-10上,ω是45,000张训练图像,分为minibatches大小128,∇ω计算使用标准的反向传播。</p>
+</li>
+<li><p>第二阶段训练参数控制器LSTM的参数θ, 对于固定数量的步骤,通常在我们的实验设置为2000。这两个阶段在ENAS的培训期间交替进行。</p>
+</li>
+</ul>
+<p><strong>Training the shared parameters ω of the child models.</strong></p>
+<p>在这一步中，固定控制器的策略。对w采用SGD获得期望最小值，loss采用标准交叉熵。梯度的计算采用蒙特卡罗估计</p>
+<script type="math/tex; mode=display">
+\nabla_{\omega} \mathbb{E}_{\mathbf{m} \sim \pi(\mathbf{m} ; \theta)}[\mathcal{L}(\mathbf{m} ; \omega)] \approx \frac{1}{M} \sum_{i=1}^{M} \nabla_{\omega} \mathcal{L}\left(\mathbf{m}_{i}, \omega\right)</script><p>本公式提供了关于梯度的无偏估计，但这个估计比固定m的标准SGD梯度有更高的方差。但令人惊奇的是，我们发现M=1时表现良好，也就是说，我们可以从π(M;θ)中取样任何单一模型Mω，直接使用它的参数w。</p>
+<p><strong>Training the controller parameters θ.</strong></p>
+<p>在这一步中,我们固定ω和更新政策参数θ,旨在最大化期望的奖励Em∼π(m;θ)[R (mω)]。我们使用Adam优化器(Kingma &amp; Ba, 2015)，使用REINFORCE计算梯度，并使用moving average baseline来减少方差。</p>
+<p>奖励R (m，ω)在验证集进行计算,而不是在训练集上,来鼓励ENAS选择泛化更好的模型而不是overfit模型。在我们的语言模型实验中，奖励函数为c/valid ppl，其中的perplexity是在一个验证集的minibatch上计算出来的。在我们的图像分类实验中，奖励函数是验证集上一个minibatch的准确性。</p>
+<p><strong>Deriving Architectures.</strong> </p>
+<p>如何在训练好的ENAS模型中派生出全新的结构。首先从训练好的策略π(m, θ)中采样几个模型。针对每个模型，通过验证集的一个minibatch计算reward。选取其中reward最高的模型从零开始预训练。</p>
+<p>通过一些其他工作可以证明我们这样做是有效而经济的。</p>
+<h3 id="2-3-设计CNN网络"><a href="#2-3-设计CNN网络" class="headerlink" title="2.3 设计CNN网络"></a>2.3 设计CNN网络</h3><p>在卷积模型的搜索空间中，控制器RNN在每个desicion block上采样了两组决策:1)连接到之前的哪个节点，2)使用什么计算操作。这些决策在卷积模型中构建了一个层。类似NAS，ENAS依旧采用anchor来实现skip connection。</p>
+<p>下图中提供了一个采样卷积网络的示例。在本例中，在第k = 4层，控制器对之前的索引{1,3}进行采样，因此第1层和第3层的输出沿着深度维度进行连接并发送到第4层。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g34gb378icj30fr0aemyh.jpg" alt></p>
+<p>同时，使用何种计算操作的决定，将特定的层设置为卷积层、平均池层或最大pooing层。控制器可用的6个操作是:3×3 conv， 5×5 conv，3×3 dw conv， 5×5 dw conv，3×3 maxpooling, 和3×3 average pooling。对于递归cell，ENAS卷积网络中每一层的每个操作都有一组不同的参数。</p>
+<p>在总共进行L次所描述的决策集时，我们可以对L层网络进行采样。由于所有的决策都是独立的，所以搜索空间中存在$6^{L} \times 2^{L(L-1) / 2}$个网络。在我们的实验中，L = 12，得到$1.6×10^{29}$个可能的网络。</p>
+<h3 id="2-4-设计卷积cell"><a href="#2-4-设计卷积cell" class="headerlink" title="2.4 设计卷积cell"></a>2.4 设计卷积cell</h3><p>同样的，可以只设计简单的卷积模块-cell，再进行堆叠。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g34gi5nw3bj30g103xdg0.jpg" alt></p>
+<p>我们使用带有B节点的ENAS的可计算DAG来表示每个cell中的计算过程。在DAG中,节点1和节点2被视为细胞的输入，它们其实为前两个cell的最后输出。对于每个剩余的B−2个节点, 控制器RNN需要做两套决定:1)哪两个节点作为当前节点的输入，2)用于这两个采样节点的两个操作。可用的5种操作有:identity, 3×3 separable convolution,  5×5 separable convolution, 3×3 average pooling,  3×3 max pooling。在每个节点上，采样前一个节点及其对应的操作之后，将这些操作应用于前一个节点，并添加它们的结果。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g34girofugj30ga053jry.jpg" alt></p>
+<p>和前面一样，我们用一个例子来说明搜索空间的机制，这里是B = 4个节点(参见图5)。</p>
+<ol>
+<li><p>节点1,2是输入节点，因此不需要为它们做任何决策。设$h_1$,$ h_2$为这些节点的输出。</p>
+</li>
+<li><p>在节点3:控制器采样前两个节点和两个操作。在左上角的图5中，它对节点1、节点2分别选取了操作sep conv 5x5和identity。这意味着$h_3 = {sep_conv_5x5}(h_2) + id(h_2)$。</p>
+</li>
+<li><p>在节点4:控制器采样节点3、节点1为 avg pooling3x3和sep conv 3x3。这意味着$h_4 = avg_pool_3x3(h_3) + sep_conv_3x3(h_1)$。</p>
+</li>
+<li><p>由于除h4之外的所有节点都被用作至少另一个节点的输入，因此惟一的松散端h4被视为单元的输出。如果有多个松散的端点，它们将沿着深度维度连接起来，形成单元格的输出。</p>
+</li>
+</ol>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g36o1yolgqj308f0bg3yx.jpg" alt></p>
+<p>在我们讨论的搜索空间中也可以实现一个reduction cell，方法很简单:</p>
+<ol>
+<li><p>从搜索空间中抽取一个计算图</p>
+</li>
+<li><p>以2为步长应用所有operations</p>
+</li>
+</ol>
+<p>因此，约简单元将其输入的空间维度减少了2倍。跟随Zoph等人(2018)，我们对卷积细胞上的reduction cell进行采样，从而使控制RNN总共运行2个(B - 2)块。</p>
+<p>最后，我们估计了这个搜索空间的复杂度。在节点$i(3 \leq i \leq B)$处，控制器可以从$i−1$个节点中任意选择2个节点，从5个操作中任意选择2个操作。由于所有的决策都是独立的，所以有$(5×(B - 2)!)^2$个可能的单元。由于我们分别对normal cell和reduction cell进行采样，因此搜索空间的最终大小为$(5×(B - 2)!)^4$。在我们的实验中，当$B = 7$时，搜索空间可以实现$1.3×10^{11}$个最终网络，使得搜索空间明显小于整个卷积网络的搜索空间(第2.3节)。</p>
+<h2 id="三-实验结果"><a href="#三-实验结果" class="headerlink" title="三  实验结果"></a>三  实验结果</h2><p>主实验为RNN实验：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g36mbgiy7yj30sc0b4n01.jpg" alt></p>
+<p>在CNN上的表现：<strong>最重要的，通过权重共享，现在ENAS的训练时长是一块1080TI训练0.45天</strong></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g34gt7rwbhj30yn0kwdmf.jpg" alt></p>
+<p>训练得到的cell如下：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g36mama6vej30dy0mndhq.jpg" alt></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Google-Brain/" rel="tag"><i class="fa fa-tag"></i> Google Brain</a>
+          
+            <a href="/tags/ENAS/" rel="tag"><i class="fa fa-tag"></i> ENAS</a>
+          
+            <a href="/tags/weight-sharing/" rel="tag"><i class="fa fa-tag"></i> weight sharing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/12/论文阅读-NASNet/" rel="next" title="论文阅读-NASNet">
+                <i class="fa fa-chevron-left"></i> 论文阅读-NASNet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/12/论文阅读-RandWiredNN/" rel="prev" title="论文阅读-RandWiredNN">
+                论文阅读-RandWiredNN <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzQ3NS8yMDAxNQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Joey Zhang">
+            
+              <p class="site-author-name" itemprop="name">Joey Zhang</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/JiaoYuZhang" title="GitHub &rarr; https://github.com/JiaoYuZhang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:jiaoyu_zhang@zju.edu.cn" title="E-Mail &rarr; mailto:jiaoyu_zhang@zju.edu.cn" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一-简介"><span class="nav-number">2.</span> <span class="nav-text">一 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-方法"><span class="nav-number">3.</span> <span class="nav-text">二 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-RNN中的cell设计"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 RNN中的cell设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-培训ENAS并派生体系结构"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 培训ENAS并派生体系结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-设计CNN网络"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 设计CNN网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-设计卷积cell"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 设计卷积cell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-实验结果"><span class="nav-number">4.</span> <span class="nav-text">三  实验结果</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Joey Zhang</span>
+
+  
+
+  
+</div>
+
+
+<div class="word-count">
+  <i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+  <span class="post-meta-divider">|</span>
+
+  <span class="post-count">博客全站共20.5k字</span>
+</div>
+
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script>
+  window.livereOptions = {
+    refer: '2019/05/12/论文阅读-ENAS/'
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

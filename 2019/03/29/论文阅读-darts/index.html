@@ -104,7 +104,7 @@
 
 
   <meta name="description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
-<meta name="keywords" content="轻量化卷积,darts,NAS,autoML">
+<meta name="keywords" content="轻量化卷积,NAS,darts,autoML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="论文阅读-darts">
 <meta property="og:url" content="https://jiaoyuzhang.github.io/2019/03/29/论文阅读-darts/index.html">
@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1k6p1emunj31240ki7jt.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6ooqv18j30oq0w2als.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg">
-<meta property="og:updated_time" content="2019-03-29T17:53:01.644Z">
+<meta property="og:updated_time" content="2019-05-19T14:40:28.715Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-darts">
 <meta name="twitter:description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
@@ -449,7 +449,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-03-30 01:53:01" itemprop="dateModified" datetime="2019-03-30T01:53:01+08:00">2019-03-30</time>
+                <time title="Modified: 2019-05-19 22:40:28" itemprop="dateModified" datetime="2019-05-19T22:40:28+08:00">2019-05-19</time>
               
             
           </span>
@@ -506,7 +506,7 @@
         <p>DARTS：架构搜索的可微解决</p>
 <p>论文： DARTS: Differentiable Architecture Search 【<a href="https://arxiv.org/abs/1806.09055" target="_blank" rel="noopener">pdf</a>】【 <a href="https://github.com/quark0/darts" target="_blank" rel="noopener">code</a>】</p>
 <p>作者：<a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Liu%2C+H" target="_blank" rel="noopener">Hanxiao Liu</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Simonyan%2C+K" target="_blank" rel="noopener">Karen Simonyan</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Yang%2C+Y" target="_blank" rel="noopener">Yiming Yang</a></p>
-<h2 id="第一部分-什么是神经网络架构搜索"><a href="#第一部分-什么是神经网络架构搜索" class="headerlink" title="第一部分 什么是神经网络架构搜索"></a>第一部分 什么是神经网络架构搜索</h2><h3 id="1-1-神经网络架构搜索（Neural-Architecture-Search）"><a href="#1-1-神经网络架构搜索（Neural-Architecture-Search）" class="headerlink" title="1.1 神经网络架构搜索（Neural Architecture Search）"></a>1.1 神经网络架构搜索（Neural Architecture Search）</h3><p>深度学习模型在很多任务上都取得了不错的效果，但调参对于深度模型来说是一项非常苦难的事情，众多的超参数和网络结构参数会产生爆炸性的组合，常规的 random search 和 grid search 效率非常低，因此最近几年神经网络的架构搜索和超参数优化成为一个研究热点。<br>NAS通常由三部分组成。首先确定search space，然后选择search<br>strategy，最后选择评价策略并迭代优化。<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg" alt><br>搜索空间：搜索空间定义了优化问题的变量。深度学习模型的性能是由网络架构参数和对应的超参数来决定的，因此只需要对复杂模型的架构参数和对应的超参数进行优化即可。</p>
+<h2 id="第一部分-什么是神经网络架构搜索"><a href="#第一部分-什么是神经网络架构搜索" class="headerlink" title="第一部分 什么是神经网络架构搜索"></a>第一部分 什么是神经网络架构搜索</h2><h3 id="1-1-神经网络架构搜索（Neural-Architecture-Search）"><a href="#1-1-神经网络架构搜索（Neural-Architecture-Search）" class="headerlink" title="1.1 神经网络架构搜索（Neural Architecture Search）"></a>1.1 神经网络架构搜索（Neural Architecture Search）</h3><p>深度学习模型在很多任务上都取得了不错的效果，但调参对于深度模型来说是一项非常苦难的事情，众多的超参数和网络结构参数会产生爆炸性的组合，常规的 random search 和 grid search 效率非常低，因此最近几年神经网络的架构搜索和超参数优化成为一个研究热点。<br>NAS通常由三部分组成。首先确定search space，然后选择search strategy，最后选择评价策略并迭代优化。<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg" alt><br>搜索空间：搜索空间定义了优化问题的变量。深度学习模型的性能是由网络架构参数和对应的超参数来决定的，因此只需要对复杂模型的架构参数和对应的超参数进行优化即可。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1aiml9o9kj30ia0i0wg5.jpg" width="250," height="250"></p>
 <p>最开始为链式的搜索空间，然后RNN中也采用了分支搜索。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aip9bswoj30m00kctbg.jpg" width="250," height="250"></p>
@@ -602,9 +602,9 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
           
             <a href="/tags/轻量化卷积/" rel="tag"><i class="fa fa-tag"></i> 轻量化卷积</a>
           
-            <a href="/tags/darts/" rel="tag"><i class="fa fa-tag"></i> darts</a>
-          
             <a href="/tags/NAS/" rel="tag"><i class="fa fa-tag"></i> NAS</a>
+          
+            <a href="/tags/darts/" rel="tag"><i class="fa fa-tag"></i> darts</a>
           
             <a href="/tags/autoML/" rel="tag"><i class="fa fa-tag"></i> autoML</a>
           
@@ -707,7 +707,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -730,7 +730,9 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -759,7 +761,31 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
@@ -871,7 +897,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
 </span>
   <span class="post-meta-divider">|</span>
 
-  <span class="post-count">博客全站共6.6k字</span>
+  <span class="post-count">博客全站共20.5k字</span>
 </div>
 
 

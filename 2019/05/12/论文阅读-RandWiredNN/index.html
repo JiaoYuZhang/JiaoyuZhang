@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="RAndWireNN 基本思想是研究设计stochastic network generator，也就是设计网络构架的机制，它的关注点在网络的连接方式上。论文作者引入了一种网络模型空间的构造方法，即图论中的random graph，之后用grid search搜索出较好的神经网络子集，并在ImageNet的1000-class分类任务上进行验证。">
+<meta name="keywords" content="RandWiredNN,stochastic network generator,random graph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读-RandWiredNN">
+<meta property="og:url" content="https://jiaoyuzhang.github.io/2019/05/12/论文阅读-RandWiredNN/index.html">
+<meta property="og:site_name" content="Joey&#39;s Notes">
+<meta property="og:description" content="RAndWireNN 基本思想是研究设计stochastic network generator，也就是设计网络构架的机制，它的关注点在网络的连接方式上。论文作者引入了一种网络模型空间的构造方法，即图论中的random graph，之后用grid search搜索出较好的神经网络子集，并在ImageNet的1000-class分类任务上进行验证。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36xbcy5egj30h70hfgpz.jpg">
+<meta property="og:image" content="https://jiaoyuzhang.github.io/Users/vera/Library/Application%20Support/typora-user-images/image-20190519210043114.png">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g36y6tx0x5j304p05yjrg.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g36yof1qjrj30hx0puwo8.jpg">
+<meta property="og:image" content="https://jiaoyuzhang.github.io/Users/vera/Library/Application%20Support/typora-user-images/image-20190519214558824.png">
+<meta property="og:image" content="https://jiaoyuzhang.github.io/Users/vera/Library/Application%20Support/typora-user-images/image-20190519214955554.png">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36ypp9qr0j30e10b30uq.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36yq88vmtj30e606pmyc.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36yqmat6aj30dv06jab9.jpg">
+<meta property="og:image" content="https://jiaoyuzhang.github.io/Users/vera/Library/Application%20Support/typora-user-images/image-20190519214922429.png">
+<meta property="og:updated_time" content="2019-05-19T14:57:36.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文阅读-RandWiredNN">
+<meta name="twitter:description" content="RAndWireNN 基本思想是研究设计stochastic network generator，也就是设计网络构架的机制，它的关注点在网络的连接方式上。论文作者引入了一种网络模型空间的构造方法，即图论中的random graph，之后用grid search搜索出较好的神经网络子集，并在ImageNet的1000-class分类任务上进行验证。">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36xbcy5egj30h70hfgpz.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Joey's Notes" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://jiaoyuzhang.github.io/2019/05/12/论文阅读-RandWiredNN/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>论文阅读-RandWiredNN | Joey's Notes</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Joey's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jiaoyuzhang.github.io/2019/05/12/论文阅读-RandWiredNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Joey Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文阅读-RandWiredNN
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-12 13:38:15" itemprop="dateCreated datePublished" datetime="2019-05-12T13:38:15+08:00">2019-05-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-19 22:57:36" itemprop="dateModified" datetime="2019-05-19T22:57:36+08:00">2019-05-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NAS/" itemprop="url" rel="index"><span itemprop="name">NAS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            <div class="post-description">RAndWireNN 基本思想是研究设计stochastic network generator，也就是设计网络构架的机制，它的关注点在网络的连接方式上。论文作者引入了一种网络模型空间的构造方法，即图论中的random graph，之后用grid search搜索出较好的神经网络子集，并在ImageNet的1000-class分类任务上进行验证。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>论文： Exploring Randomly Wired Neural Networks for Image Recognition 【<a href="https://arxiv.org/abs/1904.01569" target="_blank" rel="noopener">pdf</a>】</p>
+<p>作者：<a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Xie%2C+S" target="_blank" rel="noopener">Saining Xie</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Kirillov%2C+A" target="_blank" rel="noopener">Alexander Kirillov</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Girshick%2C+R" target="_blank" rel="noopener">Ross Girshick</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=He%2C+K" target="_blank" rel="noopener">Kaiming He</a></p>
+<p>参考文章：<a href="https://zhuanlan.zhihu.com/p/62837029" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/62837029</a></p>
+<p>本文阅读有大量参考上述参考文章，也会补充部分个人细节与思考。</p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>RAndWireNN 基本思想是研究设计<strong>stochastic network generator</strong>，也就是设计网络构架的机制，它的关注点在网络的连接方式上。下图是本文中获得的网络结构：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g36xbcy5egj30h70hfgpz.jpg" alt></p>
+<p>论文作者引入了一种网络模型空间的构造方法，即图论中的random graph，之后用grid search搜索出较好的神经网络子集，并在ImageNet的1000-class分类任务上进行验证。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>论文的主要工作包含以下步骤：</p>
+<p>（1）基于图论的随机图方法生成随机图Random Graph；</p>
+<p>（2）将Random Graph转换为一个神经网络NN；</p>
+<p>（3）将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN；</p>
+<p>（4）在ImageNet 1000-class任务上验证RandWireNN的表现；</p>
+<p>（5）重复（1）到（4）步骤。</p>
+<h3 id="一、基于图论的随机图方法生成随机图Random-Graph"><a href="#一、基于图论的随机图方法生成随机图Random-Graph" class="headerlink" title="一、基于图论的随机图方法生成随机图Random Graph"></a>一、基于图论的随机图方法生成随机图Random Graph</h3><p>作者引入了三种随机图生成方法，即Erdos-Renyi（ER）、Barabasi-Albert（BA）和 Watts-Strogatz（WS）。这三个方法生成随机图的机制比较简单。</p>
+<ul>
+<li><p>ER: N个节点，节点两两之间以P的概率有一条边。该方法包含一个参数P，故以ER(P)表示。</p>
+</li>
+<li><p>BA: 初始有M个节点（M&lt;N），每增加1个新节点的时候，该节点以一定的概率与已有的所有节点相连（这个概率与已有节点的度有关），重复，直到这个新节点有M条边。重复，直到整个图有N个节点。该方法包含一个参数M，故以BA(M)表示。</p>
+</li>
+<li><p>WS: 所有N个节点排成一个圈，每个节点与两边邻近的K/2个节点相连。之后按照顺时针方向遍历每一个节点，与当前节点相连的某一条边以概率P与其他某个节点相连。重复K/2次。该方法包含2个参数K和P，故以WS(K,P)表示。</p>
+</li>
+</ul>
+<p>其中模型的节点总数N由论文作者根据网络复杂度（FLOPs）手动指定，因此ER方法的参数搜索空间为P∈[0.0,1.0]，BA方法的参数搜索空间为M∈[1,N]，WS方法的参数搜索空间为K∈[1,N-1] x P∈[0.0,1.0]。图1是三种方法生成的随机图。</p>
+<p><img src="/Users/vera/Library/Application Support/typora-user-images/image-20190519210043114.png" alt="image-20190519210043114"></p>
+<h3 id="二、把生成的随机图Random-Graph转换为一个神经网络NN"><a href="#二、把生成的随机图Random-Graph转换为一个神经网络NN" class="headerlink" title="二、把生成的随机图Random Graph转换为一个神经网络NN"></a>二、把生成的随机图Random Graph转换为一个神经网络NN</h3><p><strong>将随机图转化为DAG</strong></p>
+<p>首先要给每条边指定一个方向，即把生成的随机图Random Graph转换为有向无环图DAG。方法就是给每个节点分配一个索引index（从1到N），若两个节点之间有边，则边的方向从小索引节点到大索引节点。其中ER方法按照随机的方式给N个节点分配索引；BA方法给初始的M个节点分配索引1~M，之后每增加一个节点，其索引加1；WS方法则按照顺时针方向从小到大给N个节点分配索引。</p>
+<p><strong>为DAG的边和节点赋上操作</strong></p>
+<p>边操作：本文中假设每条边都代表着数据流，将一个tensor从一个节点送到另一个节点。</p>
+<p>节点操作：每一个节点代表一个一个实际操作。这个操作可以细分为以下三步：</p>
+<ul>
+<li><p>Aggregation：（输入操作：聚合）输入数据(从一条或多条边)到节点通过加权求和来聚合在一起；其中权重是正向可学习的。</p>
+</li>
+<li><p>Transformation：（转换操作：卷积）聚合数据由定义为[relu-convolu- bn]三元组的转换处理。所有节点都使用相同类型的卷积，默认情况下为3×3可分卷积。</p>
+</li>
+<li><p>Distribution：（输出操作：复制）节点的输出边缘发送转换后的数据的相同副本。</p>
+</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g36y6tx0x5j304p05yjrg.jpg" alt></p>
+<p>这样设计操作带来的一些特点：</p>
+<ol>
+<li>Additive aggregation能够维持输入输出channel数不变，防止后面的卷积计算越来越大，来避免仅仅因为增加计算量而提高大型输入节点的重要性程度，而忽略网络连接的作用。</li>
+<li>Transformation应具有相同数量的输出和输入通道(除非切换阶段），以确保转换后的数据可以与来自任何其他节点的数据相结合。固定通道计数之后，不管输入和输出的程度如何，都会保持每个节点的FLOPs(浮点操作)和参数计数不变。</li>
+<li>不论输入和输出的程度如何，聚集和分布几乎没有参数(加权求和的参数数目很少)。此外，假设每条边都是无参数的，这样一来，<strong>图的FLOPs和参数数量与节点的数量大致成正比，且几乎与边的数量无关</strong>。</li>
+</ol>
+<p>这些属性几乎将FLOPs和参数计数与网络连接解耦，例如，在随机网络实例或不同生成器之间，FLOPs的偏差通常为±2%。这可以在不增加/减少模型复杂性的情况下比较不同的图。因此，任务性能的差异反映了连接模式的属性。</p>
+<p><strong>设置cell的输入节点和输出节点</strong></p>
+<p>给DAG指定唯一的输入节点（input）和唯一的输出节点(output)。DAG本身包含N个节点，那么额外指定一个输入节点与DAG中所有入度为0的节点相连，其负责将输入的图片转发出去；再额外指定一个输出节点与DAG中所有出度为0的节点相连，该节点进行均值计算后将结果输出。</p>
+<h3 id="三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN"><a href="#三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN" class="headerlink" title="三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN"></a>三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN</h3><p>借鉴其他经典深度学习神经网络，作者将多个NN堆叠起来形成最终的随机连接神经网络RandWireNN。图3为一个示例，其包含共5个stages，其中stage1是一个卷积层，stage2可以是一个卷积层或者是一个NN，stage3、stage4和stage5均为NN。不同stage之间：卷积操作的stride为2，故feature map的大小逐渐减半；卷积操作的卷积核的数量x2，故feature map的通道数(即C)也x2。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g36yof1qjrj30hx0puwo8.jpg" alt></p>
+<p>其中每个NN的节点数N（不包含输入和输出节点）设置为32，通道数C设置为78或者109/154。不同的（N,C）对应不同的网络复杂度（FLOPs），这样可以跟不同规模（small/regular/larger）的其他经典网络进行实验比较。</p>
+<p><img src="/Users/vera/Library/Application Support/typora-user-images/image-20190519214558824.png" alt="image-20190519214558824"></p>
+<h3 id="四、在ImageNet-1000-class任务上验证RandWireNN的表现"><a href="#四、在ImageNet-1000-class任务上验证RandWireNN的表现" class="headerlink" title="四、在ImageNet 1000-class任务上验证RandWireNN的表现"></a>四、在ImageNet 1000-class任务上验证RandWireNN的表现</h3><p>（1）三个随机图生成方法（ER，BA，WS）的比较</p>
+<p>如图4所示，WS方法的表现最好，于是接下来作者挑选了WS（4,0.75）与其他网络进行比较。论文还进行了另外一个网络结构鲁棒性测试的实验，即将网络中的某个节点或者某条边随机去掉，然后测试网络的表现，最后发现WS的结构最不稳定。这个研究点很有意思，也许将来会有一种网络生成器能够生成又好又鲁棒的网络结构，类似大脑，也许有种大脑结构最不容易得精神疾病。</p>
+<p><img src="/Users/vera/Library/Application Support/typora-user-images/image-20190519214955554.png" alt="image-20190519214955554"></p>
+<p>（2）WS（4,0.75）与其他网络的比较</p>
+<p>首先是与小规模网络(smaller)进行比较，此时N=32，C=78。如表1所示，比MobileNet/ShuffleNet/NASNet/PNAS/DARTS等表现好，比Amoeba-C略差。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g36ypp9qr0j30e10b30uq.jpg" alt></p>
+<p>其次与中等规模的网络（regular）进行比较，此时N=32，C=109/154，如表2所示，比ResNet-50/101和ResNeXt-50/101表现好。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g36yq88vmtj30e606pmyc.jpg" alt></p>
+<p>最后与大规模网络（larger）进行比较，此时直接使用刚才训练好的中等规模网络，不过输入图像的size由224x224提高到320x320，如表3所示，虽然比其他网络表现略差，但是计算量少了很多。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g36yqmat6aj30dv06jab9.jpg" alt></p>
+<p>（3）迁移表现</p>
+<p>论文将RandWireNN作为骨干网络，用Faster R-CNN with FPN来检测目标（COCO object detection），如表4所示，比ResNet-50和ResNeXt-50效果好。</p>
+<p><img src="/Users/vera/Library/Application Support/typora-user-images/image-20190519214922429.png" alt="image-20190519214922429"></p>
+<h2 id="总结与思考"><a href="#总结与思考" class="headerlink" title="总结与思考"></a>总结与思考</h2><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文贡献：</p>
+<ul>
+<li>使用 WS 模型的最佳生成器生成的多个网络性能优于或可与完全手工设计的同类网络和通过各种神经结构搜索方法找到的网络相媲美。</li>
+<li>还观察到，对于同一生成器生成的不同随机网络，精度的方差较低，但不同生成器之间存在明显的精度差距。这些观察结果表明，网络生成器的设计很重要。</li>
+<li>最后，工作表明，从设计单个网络到设计网络生成器的新过渡是可能的，类似于如何从设计特征过渡到设计学习特征的网络。</li>
+</ul>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><ol>
+<li>本文还是保持了相当部分的手工设计，对于随机图参数的选择方式是否可以改进</li>
+<li>比较有意义的是，本文把NAS领域的重点从运算操作的选择转向了网络连接(拓扑)的构造。</li>
+</ol>
+<p>参考文章中俞一鹏博士的思考：</p>
+<p>（1）这篇论文将图论的方法引入，并强调network generator的重要性，很有新意，好比“虎父无犬子”，“龙生龙，凤生凤”。</p>
+<p>（2）这个idea也许你也能想到，不过快速实现这个idea的能力更重要；</p>
+<p>（3）不同stage之间只有一个node连接，这个设计未必合理；</p>
+<p>（4）迁移学习表现比较的实验过于简单，且其他实验结果也没有很惊艳。</p>
+<p>（5）引入的图论方法有点简单，也许有更复杂的图生成方法，比如Bio-inspired类的；</p>
+<p>（6）只与NASNet进行了表现比较，没有与其他AutoML方法进行对比。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RandWiredNN/" rel="tag"><i class="fa fa-tag"></i> RandWiredNN</a>
+          
+            <a href="/tags/stochastic-network-generator/" rel="tag"><i class="fa fa-tag"></i> stochastic network generator</a>
+          
+            <a href="/tags/random-graph/" rel="tag"><i class="fa fa-tag"></i> random graph</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/12/论文阅读-ENAS/" rel="next" title="论文阅读-ENAS">
+                <i class="fa fa-chevron-left"></i> 论文阅读-ENAS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzQ3NS8yMDAxNQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Joey Zhang">
+            
+              <p class="site-author-name" itemprop="name">Joey Zhang</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/JiaoYuZhang" title="GitHub &rarr; https://github.com/JiaoYuZhang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:jiaoyu_zhang@zju.edu.cn" title="E-Mail &rarr; mailto:jiaoyu_zhang@zju.edu.cn" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、基于图论的随机图方法生成随机图Random-Graph"><span class="nav-number">2.1.</span> <span class="nav-text">一、基于图论的随机图方法生成随机图Random Graph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、把生成的随机图Random-Graph转换为一个神经网络NN"><span class="nav-number">2.2.</span> <span class="nav-text">二、把生成的随机图Random Graph转换为一个神经网络NN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN"><span class="nav-number">2.3.</span> <span class="nav-text">三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、在ImageNet-1000-class任务上验证RandWireNN的表现"><span class="nav-number">2.4.</span> <span class="nav-text">四、在ImageNet 1000-class任务上验证RandWireNN的表现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结与思考"><span class="nav-number">3.</span> <span class="nav-text">总结与思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">3.2.</span> <span class="nav-text">思考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Joey Zhang</span>
+
+  
+
+  
+</div>
+
+
+<div class="word-count">
+  <i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+  <span class="post-meta-divider">|</span>
+
+  <span class="post-count">博客全站共20.5k字</span>
+</div>
+
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script>
+  window.livereOptions = {
+    refer: '2019/05/12/论文阅读-RandWiredNN/'
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
