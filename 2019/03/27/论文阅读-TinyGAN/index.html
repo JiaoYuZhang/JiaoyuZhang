@@ -111,17 +111,16 @@
 <meta property="og:site_name" content="Joey&#39;s Notes">
 <meta property="og:description" content="利用GAN来做极小人脸检测">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg">
-<meta property="og:image" content="http://note.youdao.com/src/01E3DDB023D544CA92042AEF445AE3DD">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm7cnnbqj30f0018q33.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm82ojk3j31f40ns1kx.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm8qg49sj31dy0bkgom.jpg">
-<meta property="og:updated_time" content="2019-03-27T12:45:24.397Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190310.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/Picture1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190647.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190722.png">
+<meta property="og:updated_time" content="2019-05-21T11:18:20.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-TinyFace GAN">
 <meta name="twitter:description" content="利用GAN来做极小人脸检测">
-<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190310.png">
 
 
 
@@ -428,12 +427,24 @@
                 
               
 
-              <time title="Created: 2019-03-27 18:55:31 / Modified: 20:45:24" itemprop="dateCreated datePublished" datetime="2019-03-27T18:55:31+08:00">2019-03-27</time>
+              <time title="Created: 2019-03-27 18:55:31" itemprop="dateCreated datePublished" datetime="2019-03-27T18:55:31+08:00">2019-03-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-21 19:18:20" itemprop="dateModified" datetime="2019-05-21T19:18:20+08:00">2019-05-21</time>
               
             
           </span>
@@ -490,7 +501,7 @@
         <p>论文标题：Finding Tiny Faces in the Wild with Generative Adversarial Network 【<a href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Bai_Finding_Tiny_Faces_CVPR_2018_paper.pdf" target="_blank" rel="noopener">pdf</a>】</p>
 <p>作者：Yancheng Bai， Yongqiang Zhang， Mingli Ding，Bernard Ghanem</p>
 <p>本论文被CVPR2018会议录用，并评为oral层次。GAN自从2014年被提出，至今“有名有姓”的GAN网络已经有超过200种，这次cvpr会议上也有大量的基于GAN的论文，半监督学习的GAN在图像方面依旧大有可为。因此选取了一篇比较有质量的GAN的论文进行研读。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm52jgi2j31g00rku0y.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190310.png" alt></p>
 <h2 id="背景与问题描述"><a href="#背景与问题描述" class="headerlink" title="背景与问题描述"></a>背景与问题描述</h2><p>人脸检测（Face Detection）是计算机视觉中的一个基本和重要的问题，是一个许多后续基于人脸的应用程序的关键一步。通常来说，人脸检测包括人脸的解析、验证以及标注和检索等。在过去的几十年里，人脸检测已被广泛研究，众多的准确有效的方法提出了使得在大多数受限的场景下人脸检测的效果都极好。最近的作品关注的是在不受控制的环境下的人脸，由于比例、模糊、姿势、表情和光照的显著变化，这是一个更具挑战性的问题。</p>
 <p>现代人脸探测器在大中型人脸上取得了令人瞩目的效果，但在小人脸上的性能却远远不能令人满意。小脸检测通常是指例如10×10像素这一量级的人脸检测，它目前主要有两大问题：</p>
 <p>第一，小脸由于像素过少，缺乏足够的详细信息来区分相似的背景，比如脸或手的一部分；</p>
@@ -513,7 +524,7 @@
 <h3 id="FaceDetector"><a href="#FaceDetector" class="headerlink" title="FaceDetector"></a>FaceDetector</h3><p>现有的人脸检测方法大致可以分为手工制作的基于特征的方法和基于cnn的方法。</p>
 <p>此处介绍本文中作为基准的MB-FCN。</p>
 <p>MB-FCN：Multi-branch fully convolutional network，多分支人脸检测算法。具体做法是联合中间层feature map + 高层feature map特征，用于检测小尺度人脸，单模型的多分支检测，只需做单次前向预测即可检测图像中所有尺度的人脸，因为不用假定最小可检出人脸尺度，所以MB-FCN可以检出图像中所有尺度的人脸目标。</p>
-<p><img src="http://note.youdao.com/src/01E3DDB023D544CA92042AEF445AE3DD" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/Picture1.png" alt></p>
 <p>如fig 2，MB-FCN包含四个模块：</p>
 <ol>
 <li>共享的提特征主干网，本文使用ImageNet上预训练好的ResNet-50，图像经过主干网梭一把，就可以得到各层feature map啦；</li>
@@ -524,23 +535,23 @@
 <h3 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h3><p>在了解它的具体网络结构之前，我们先了解以下GAN。</p>
 <p>GAN也就是对抗生成网络，它通过一个对抗的国车给训练一个生成模型G。它包含两个网络，一个生成器G和一个鉴别器D。训练过程交替优化生成器G和鉴别器D，两者相互竞争。训练生成器器G产生样本欺骗鉴</p>
 <p>别器D，训练鉴别器D从生成器G器生成的样本和真样本中分辨真伪图像。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/006tKfTcly1g1hm6s5txrj30bo08f41e.jpg" alt></p>
 <p>目标函数公式：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm7cnnbqj30f0018q33.jpg" alt></p>
-<p>具体过程：</p>
+<script type="math/tex; mode=display">
+\min _{G} \max _{D} V(D, G)=\mathbb{E}_{\boldsymbol{x} \sim p_{\text { dita }}(\boldsymbol{x})}[\log D(\boldsymbol{x})]+\mathbb{E}_{\boldsymbol{z} \sim p_{z}(z)}[\log (1-D(G(\boldsymbol{z})))]</script><p>具体过程：</p>
 <ul>
 <li>G是一个生成图片的网络，它接收一个随机的噪声z，通过这个噪声生成图片，记做G(z)。</li>
 <li>D是一个判别网络，判别一张图片是不是“真实的”。它的输入参数是x，x代表一张图片，输出D（x）代表x为真实图片的概率，如果为1，就代表100%是真实的图片，而输出为0，就代表不可能是真实的图片。</li>
 </ul>
 <h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>对于本篇论文，它的模型构建为：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hm82ojk3j31f40ns1kx.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190647.png" alt></p>
 <p>首先，图像输入网络。</p>
 <p>第二步，以MB-FCN检测器作为基准，使用它来从输入图像中裁剪出阳性数据(即人脸)和阴性数据(即非人脸)，用于训练生成器和鉴别器，或者生成感兴趣区域(ROIs)进行测试。</p>
 <p>第三步，训练生成器从低分辨率输入图像中重建一个4倍上采样（也就是4<em>4提高到16</em>16）高分辨率图像。其中，先使用上采样子网络（upsample sub-network），以低分辨率图像作为输入，输出为超分辨率图像。再使用细化子网络（reﬁnement sub-network），这是因为第一步生成的图像是模糊的小人脸，缺乏精细的细节，而且受MSE loss的影响，产生的超分辨率人脸通常是模糊的。</p>
 <p>第四步，鉴别器网络为vgg19架构，具有两个并行的fc层，第一个fc层是对自然真实图像或生成的超分辨率图像进行区分，第二个fc层是对人脸或非人脸进行分类。</p>
 <p>三、四两步交替优化。</p>
 <p>具体的网络结构如下图：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm8qg49sj31dy0bkgom.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521190722.png" alt></p>
 <p>生成器G中，我们不输入随机噪声，而是输入模糊的小脸。它的损失函数包括三部分，一部分是像素级的损失函数，一部分是对抗损失函数，另外移除了VGG的特征匹配损失换成。</p>
 <h2 id="思考与扩展建议"><a href="#思考与扩展建议" class="headerlink" title="思考与扩展建议"></a>思考与扩展建议</h2><p>本篇论文对于极小的人脸的检测有着比较好的实验效果，但同时，上采样的做法也导致部分非人脸的物体被误认为人脸。</p>
 
@@ -855,7 +866,7 @@
 </span>
   <span class="post-meta-divider">|</span>
 
-  <span class="post-count">博客全站共20.5k字</span>
+  <span class="post-count">博客全站共20.6k字</span>
 </div>
 
 
@@ -1344,6 +1355,46 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 

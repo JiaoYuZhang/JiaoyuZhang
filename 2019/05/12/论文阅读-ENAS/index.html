@@ -111,21 +111,21 @@
 <meta property="og:site_name" content="Joey&#39;s Notes">
 <meta property="og:description" content="在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。最关键是利用子模型之间共享参数，大大减少了训练时长。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g34ca8i909j30bk062jrn.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g34en57kvbj30f505ft96.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g34eqkxei5j30g204v3yt.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g34gb378icj30fr0aemyh.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g34gi5nw3bj30g103xdg0.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g34girofugj30ga053jry.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g36o1yolgqj308f0bg3yx.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g36mbgiy7yj30sc0b4n01.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g34gt7rwbhj30yn0kwdmf.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g36mama6vej30dy0mndhq.jpg">
-<meta property="og:updated_time" content="2019-05-19T14:08:56.587Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163446.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163528.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163644.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164039.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164122.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164152.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164412.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164504.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164654.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144438.png">
+<meta property="og:updated_time" content="2019-05-21T08:47:51.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-ENAS">
 <meta name="twitter:description" content="在ENAS中，控制器通过在大型计算图中搜索最优子图来发现神经网络结构。利用策略梯度对控制器进行训练，选择验证集上期望报酬最大的子图，同时对所选子图对应的模型进行训练，使正则交叉熵损失最小化。最关键是利用子模型之间共享参数，大大减少了训练时长。">
-<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g34ca8i909j30bk062jrn.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163446.png">
 
 
 
@@ -449,7 +449,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-05-19 22:08:56" itemprop="dateModified" datetime="2019-05-19T22:08:56+08:00">2019-05-19</time>
+                <time title="Modified: 2019-05-21 16:47:51" itemprop="dateModified" datetime="2019-05-21T16:47:51+08:00">2019-05-21</time>
               
             
           </span>
@@ -510,81 +510,68 @@
 <h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>这项工作的主要贡献是通过强制所有子模型共享权重来提高NAS的效率，从而避免从零开始到收敛对每个子模型进行训练。这个想法有明显的并发症,为不同的子模型可能利用他们的权重不同,但被以前的工作鼓励转移学习和多任务学习,证实为一个特定的模型参数学习的一项特殊的任务可以用于其他模型对其他任务。</p>
 <p>我们的经验表明，不仅在子模型之间共享参数是可能的，而且它还允许非常强大的性能。具体来说，在CIFAR-10上，我们的方法的测试误差为2.89%，而NAS的测试误差为2.65%。在Penn Treebank上，我们的方法实现了一个测试perplexity为55.8，显著优于NAS的测试perplexity为62.4 (Zoph &amp; Le, 2017)，这是Penn Treebank不使用训练后处理的方法中一个新的最先进的方法。重要的是，在我们所有的实验中，我们使用一个Nvidia GTX 1080Ti GPU，搜索架构花费不到16个小时。与NAS相比，这减少了超过1000倍的gpu小时。由于其有效性，我们将我们的方法命名为高效神经结构搜索(ENAS)。</p>
 <h2 id="二-方法"><a href="#二-方法" class="headerlink" title="二 方法"></a>二 方法</h2><p>ENAS的核心思想是观察到NAS最终遍历的所有图都可以看作是更大图的子图。换句话说，我们可以使用一个有向无环图(DAG)来表示NAS的搜索空间。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g34ca8i909j30bk062jrn.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163446.png" alt></p>
 <p>直观地说，ENAS的DAG是NAS搜索空间中所有可能的子模型的叠加，其中节点表示本地计算，边缘表示信息流。每个节点上的本地计算都有自己的参数，只有在激活特定的计算时才使用这些参数。因此，ENAS的设计允许在搜索空间中的所有子模型(即架构)之间共享参数。</p>
 <h3 id="2-1-RNN中的cell设计"><a href="#2-1-RNN中的cell设计" class="headerlink" title="2.1 RNN中的cell设计"></a>2.1 RNN中的cell设计</h3><p>对于RNN cell的设计，ENAS不同于NAS。NAS将cell架构的拓扑固定为二叉树，只学习树中每个节点的操作。ENAS则被允许在RNN cell中设计拓扑和操作，因此更加灵活。</p>
 <p>ENAS使用了一个包含N个节点的DAG，其中Node表示本地计算，Edge表示N个节点之间的信息流。<strong>ENAS的控制器是一个RNN，它决定:1)哪些边被激活，2)在DAG中的每个节点上执行哪些计算。</strong></p>
 <p>为了创建一个循环单元，控制器RNN对N个决策块进行采样。这里我们通过一个简单的例子说明ENAS机制，N = 4个竞争节点的循环细胞(如图1所示)，设x_t为循环细胞的输入信号(如word embedding)，h_t - 1为前一个时间步的输出。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g34en57kvbj30f505ft96.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163528.png" alt></p>
 <ol>
-<li><p>在节点1: 控制器首先采样一个激活函数。在本例中，控制器选择tanh激活函数，这意味着RNN的节点1应该计算$h_{1}=\tanh \left(\mathbf{x}_{t} \cdot \mathbf{W}^{(\mathbf{x})}+\mathbf{h}_{t-1} \cdot \mathbf{W}_{1}^{(\mathbf{h})}\right)$</p>
-</li>
-<li><p>在节点2: 控制器然后对之前的索引和激活函数进行采样。在我们的示例中，它选择前面的index 1和激活函数ReLU。Node 2计算$h_{2}=\operatorname{ReLU}\left(h_{1} \cdot \mathbf{W}_{2,1}^{(\mathbf{h})}\right)$</p>
-</li>
-<li><p>在节点3:控制器再次采样之前的索引和激活函数。在我们的示例中，它选择前面的index 2和激活函数ReLU。Node3 可以表示从$h_{3}=\operatorname{ReLU}\left(h_{2} \cdot \mathbf{W}_{3,2}^{(\mathbf{h})}\right)$</p>
-</li>
-<li><p>在节点4:控制器再次采样之前的索引和激活函数。在我们的例子中，它选择前面的index 1和激活函数tanh，得到$h_{4}=\tanh \left(h_{1} \cdot \mathbf{W}_{4,1}^{(\mathbf{h})}\right)$</p>
-</li>
-<li><p>对于输出，我们简单地将所有未被选中的节点平均为所有其他节点的输入。在我们的示例中，由于索引3和索引4从未被采样为任何节点的输入，所以RNN使用它们的平均值(h3 + h4)/2作为输出。也就是说，$h_t = (h_3 + h_4)/2$。</p>
-</li>
+<li>在节点1: 控制器首先采样一个激活函数。在本例中，控制器选择tanh激活函数，这意味着RNN的节点1应该计算$h_{1}=\tanh \left(\mathbf{x}_{t} \cdot \mathbf{W}^{(\mathbf{x})}+\mathbf{h}_{t-1} \cdot \mathbf{W}_{1}^{(\mathbf{h})}\right)$</li>
+<li>在节点2: 控制器然后对之前的索引和激活函数进行采样。在我们的示例中，它选择前面的index 1和激活函数ReLU。Node 2计算$h_{2}=\operatorname{ReLU}\left(h_{1} \cdot \mathbf{W}_{2,1}^{(\mathbf{h})}\right)$</li>
+<li>在节点3:控制器再次采样之前的索引和激活函数。在我们的示例中，它选择前面的index 2和激活函数ReLU。Node3 可以表示从$h_{3}=\operatorname{ReLU}\left(h_{2} \cdot \mathbf{W}_{3,2}^{(\mathbf{h})}\right)$</li>
+<li>在节点4:控制器再次采样之前的索引和激活函数。在我们的例子中，它选择前面的index 1和激活函数tanh，得到$h_{4}=\tanh \left(h_{1} \cdot \mathbf{W}_{4,1}^{(\mathbf{h})}\right)$</li>
+<li>对于输出，我们简单地将所有未被选中的节点平均为所有其他节点的输入。在我们的示例中，由于索引3和索引4从未被采样为任何节点的输入，所以RNN使用它们的平均值(h3 + h4)/2作为输出。也就是说，$h_t = (h_3 + h_4)/2$。</li>
 </ol>
 <p>在上面的示例中,对于每一对节点$j &lt;ℓ$,有一个独立的参数matrix$W^{(h)}_{ℓ, j}$。如示例所示，通过选择前面的索引，控制器还可以决定使用哪个参数矩阵。因此，在ENAS中，搜索空间中的所有复发细胞共享相同的一组参数。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g34eqkxei5j30g204v3yt.jpg" alt></p>
-<p>我们的搜索空间包含指数级的构型。具体来说，如果RNN的cell有N个节点，并且我们允许4个激活函数(即tanh、ReLU、identity和sigmoid)，那么搜索空间就是4^N×N!配置。在我们的实验中，N = 12，这意味着在我们的搜索空间中大约有10^15个模型。</p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521163644.png" alt></p>
+<p>我们的搜索空间包含指数级的构型。具体来说，如果RNN的cell有N个节点，并且我们允许4个激活函数(即tanh、ReLU、identity和sigmoid)，那么搜索空间就是4^N×N!配置。在我们的实验中，N = 12，这意味着在我们的搜索空间中大约有$10^{15}$个模型。</p>
 <h3 id="2-2-培训ENAS并派生体系结构"><a href="#2-2-培训ENAS并派生体系结构" class="headerlink" title="2.2 培训ENAS并派生体系结构"></a>2.2 培训ENAS并派生体系结构</h3><p>ENAS控制器网络是一个拥有100个隐藏单元的LSTM (Hochreiter &amp; Schmidhuber, 1997)。这个LSTM通过softmax分类器以自回归的方式对决策进行采样:将上一步中的决策作为嵌入到下一步的输入提供。在第一步，控制器网络接收一个空嵌入作为输入。</p>
 <p>在ENAS,有两套可学的参数:控制器LSTM的参数θ,和子模型的共享参数ω。ENAS的培训过程包括两个交叉阶段。</p>
 <ul>
-<li><p>第一阶段通过一整个训练集训练子模型共享参数w。在本文的Penn Treebank实验中，ω是训练大约400 steps,每个minibatch使用64个样本,采用梯度反向传播+梯度截断（<strong>Truncated Gradient</strong>）进行优化，每隔35 steps进行一次隔断。同时,在CIFAR-10上,ω是45,000张训练图像,分为minibatches大小128,∇ω计算使用标准的反向传播。</p>
-</li>
-<li><p>第二阶段训练参数控制器LSTM的参数θ, 对于固定数量的步骤,通常在我们的实验设置为2000。这两个阶段在ENAS的培训期间交替进行。</p>
-</li>
+<li>第一阶段通过一整个训练集训练子模型共享参数w。在本文的Penn Treebank实验中，ω是训练大约400 steps,每个minibatch使用64个样本,采用梯度反向传播+梯度截断（<strong>Truncated Gradient</strong>）进行优化，每隔35 steps进行一次隔断。同时,在CIFAR-10上,ω是45,000张训练图像,分为minibatches大小128,∇ω计算使用标准的反向传播。</li>
+<li>第二阶段训练参数控制器LSTM的参数θ, 对于固定数量的步骤,通常在我们的实验设置为2000。这两个阶段在ENAS的培训期间交替进行。</li>
 </ul>
 <p><strong>Training the shared parameters ω of the child models.</strong></p>
 <p>在这一步中，固定控制器的策略。对w采用SGD获得期望最小值，loss采用标准交叉熵。梯度的计算采用蒙特卡罗估计</p>
 <script type="math/tex; mode=display">
-\nabla_{\omega} \mathbb{E}_{\mathbf{m} \sim \pi(\mathbf{m} ; \theta)}[\mathcal{L}(\mathbf{m} ; \omega)] \approx \frac{1}{M} \sum_{i=1}^{M} \nabla_{\omega} \mathcal{L}\left(\mathbf{m}_{i}, \omega\right)</script><p>本公式提供了关于梯度的无偏估计，但这个估计比固定m的标准SGD梯度有更高的方差。但令人惊奇的是，我们发现M=1时表现良好，也就是说，我们可以从π(M;θ)中取样任何单一模型Mω，直接使用它的参数w。</p>
+\nabla_{\omega} \mathbb{E}_{\mathbf{m} \sim \pi(\mathbf{m} ; \theta)}[\mathcal{L}(\mathbf{m} ; \omega)] \approx \frac{1}{M} \sum_{i=1}^{M} \nabla_{\omega} \mathcal{L}\left(\mathbf{m}_{i}, \omega\right)</script><p>本公式提供了关于梯度的无偏估计，但这个估计比固定m的标准SGD梯度有更高的方差。但令人惊奇的是，我们发现$M=1$时表现良好，也就是说，我们可以从$π(M;θ)$中取样任何单一模型$M_ω$，直接使用它的参数$w$。</p>
 <p><strong>Training the controller parameters θ.</strong></p>
-<p>在这一步中,我们固定ω和更新政策参数θ,旨在最大化期望的奖励Em∼π(m;θ)[R (mω)]。我们使用Adam优化器(Kingma &amp; Ba, 2015)，使用REINFORCE计算梯度，并使用moving average baseline来减少方差。</p>
-<p>奖励R (m，ω)在验证集进行计算,而不是在训练集上,来鼓励ENAS选择泛化更好的模型而不是overfit模型。在我们的语言模型实验中，奖励函数为c/valid ppl，其中的perplexity是在一个验证集的minibatch上计算出来的。在我们的图像分类实验中，奖励函数是验证集上一个minibatch的准确性。</p>
+<p>在这一步中,我们固定ω和更新政策参数θ,旨在最大化期望的奖励$\mathbb{E}_{\mathbf{m} \sim \pi(\mathbf{m} ; \theta)}[\mathcal{R}(\mathbf{m}, \omega)]$。我们使用Adam优化器，使用REINFORCE计算梯度，并使用moving average baseline来减少方差。</p>
+<p>奖励$\mathcal{R}(\mathbf{m}, \omega)$在验证集进行计算,而不是在训练集上,来鼓励ENAS选择泛化更好的模型而不是overfit模型。在我们的语言模型实验中，奖励函数为c/valid ppl，其中的perplexity是在一个验证集的minibatch上计算出来的。在我们的图像分类实验中，奖励函数是验证集上一个minibatch的准确性。</p>
 <p><strong>Deriving Architectures.</strong> </p>
 <p>如何在训练好的ENAS模型中派生出全新的结构。首先从训练好的策略π(m, θ)中采样几个模型。针对每个模型，通过验证集的一个minibatch计算reward。选取其中reward最高的模型从零开始预训练。</p>
 <p>通过一些其他工作可以证明我们这样做是有效而经济的。</p>
 <h3 id="2-3-设计CNN网络"><a href="#2-3-设计CNN网络" class="headerlink" title="2.3 设计CNN网络"></a>2.3 设计CNN网络</h3><p>在卷积模型的搜索空间中，控制器RNN在每个desicion block上采样了两组决策:1)连接到之前的哪个节点，2)使用什么计算操作。这些决策在卷积模型中构建了一个层。类似NAS，ENAS依旧采用anchor来实现skip connection。</p>
 <p>下图中提供了一个采样卷积网络的示例。在本例中，在第k = 4层，控制器对之前的索引{1,3}进行采样，因此第1层和第3层的输出沿着深度维度进行连接并发送到第4层。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g34gb378icj30fr0aemyh.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164039.png" alt></p>
 <p>同时，使用何种计算操作的决定，将特定的层设置为卷积层、平均池层或最大pooing层。控制器可用的6个操作是:3×3 conv， 5×5 conv，3×3 dw conv， 5×5 dw conv，3×3 maxpooling, 和3×3 average pooling。对于递归cell，ENAS卷积网络中每一层的每个操作都有一组不同的参数。</p>
-<p>在总共进行L次所描述的决策集时，我们可以对L层网络进行采样。由于所有的决策都是独立的，所以搜索空间中存在$6^{L} \times 2^{L(L-1) / 2}$个网络。在我们的实验中，L = 12，得到$1.6×10^{29}$个可能的网络。</p>
+<p>在总共进行L次所描述的决策集时，我们可以对L层网络进行采样。由于所有的决策都是独立的，所以搜索空间中存在$6^{L} \times 2^{L(L-1) / 2}$个网络。在我们的实验中，$L = 12$，得到$1.6×10^{29}$个可能的网络。</p>
 <h3 id="2-4-设计卷积cell"><a href="#2-4-设计卷积cell" class="headerlink" title="2.4 设计卷积cell"></a>2.4 设计卷积cell</h3><p>同样的，可以只设计简单的卷积模块-cell，再进行堆叠。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g34gi5nw3bj30g103xdg0.jpg" alt></p>
-<p>我们使用带有B节点的ENAS的可计算DAG来表示每个cell中的计算过程。在DAG中,节点1和节点2被视为细胞的输入，它们其实为前两个cell的最后输出。对于每个剩余的B−2个节点, 控制器RNN需要做两套决定:1)哪两个节点作为当前节点的输入，2)用于这两个采样节点的两个操作。可用的5种操作有:identity, 3×3 separable convolution,  5×5 separable convolution, 3×3 average pooling,  3×3 max pooling。在每个节点上，采样前一个节点及其对应的操作之后，将这些操作应用于前一个节点，并添加它们的结果。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g34girofugj30ga053jry.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164122.png" alt></p>
+<p>我们使用带有B节点的ENAS的可计算DAG来表示每个cell中的计算过程。在DAG中,节点1和节点2被视为细胞的输入，它们其实为前两个cell的最后输出。对于每个剩余的B−2个节点, 控制器RNN需要做两套决定:<br>1)哪两个节点作为当前节点的输入，<br>2)用于这两个采样节点的两个操作。<br>可用的5种操作有:identity, 3×3 separable convolution,  5×5 separable convolution, 3×3 average pooling,  3×3 max pooling。在每个节点上，采样前一个节点及其对应的操作之后，将这些操作应用于前一个节点，并添加它们的结果。</p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164152.png" alt></p>
 <p>和前面一样，我们用一个例子来说明搜索空间的机制，这里是B = 4个节点(参见图5)。</p>
 <ol>
-<li><p>节点1,2是输入节点，因此不需要为它们做任何决策。设$h_1$,$ h_2$为这些节点的输出。</p>
-</li>
-<li><p>在节点3:控制器采样前两个节点和两个操作。在左上角的图5中，它对节点1、节点2分别选取了操作sep conv 5x5和identity。这意味着$h_3 = {sep_conv_5x5}(h_2) + id(h_2)$。</p>
-</li>
-<li><p>在节点4:控制器采样节点3、节点1为 avg pooling3x3和sep conv 3x3。这意味着$h_4 = avg_pool_3x3(h_3) + sep_conv_3x3(h_1)$。</p>
-</li>
-<li><p>由于除h4之外的所有节点都被用作至少另一个节点的输入，因此惟一的松散端h4被视为单元的输出。如果有多个松散的端点，它们将沿着深度维度连接起来，形成单元格的输出。</p>
-</li>
+<li>节点1,2是输入节点，因此不需要为它们做任何决策。设$h_1$,$ h_2$为这些节点的输出。</li>
+<li>在节点3:控制器采样前两个节点和两个操作。在左上角的图5中，它对节点1、节点2分别选取了操作sep conv 5x5和identity。这意味着$h_3 = {sep_conv_5x5}(h_2) + id(h_2)$。</li>
+<li>在节点4:控制器采样节点3、节点1为 avg pooling3x3和sep conv 3x3。这意味着$h_4 = avg_pool_3x3(h_3) + sep_conv_3x3(h_1)$。</li>
+<li>由于除h4之外的所有节点都被用作至少另一个节点的输入，因此惟一的松散端h4被视为单元的输出。如果有多个松散的端点，它们将沿着深度维度连接起来，形成单元格的输出。</li>
 </ol>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g36o1yolgqj308f0bg3yx.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164412.png" alt></p>
 <p>在我们讨论的搜索空间中也可以实现一个reduction cell，方法很简单:</p>
 <ol>
-<li><p>从搜索空间中抽取一个计算图</p>
-</li>
-<li><p>以2为步长应用所有operations</p>
-</li>
+<li>从搜索空间中抽取一个计算图</li>
+<li>以2为步长应用所有operations</li>
 </ol>
 <p>因此，约简单元将其输入的空间维度减少了2倍。跟随Zoph等人(2018)，我们对卷积细胞上的reduction cell进行采样，从而使控制RNN总共运行2个(B - 2)块。</p>
 <p>最后，我们估计了这个搜索空间的复杂度。在节点$i(3 \leq i \leq B)$处，控制器可以从$i−1$个节点中任意选择2个节点，从5个操作中任意选择2个操作。由于所有的决策都是独立的，所以有$(5×(B - 2)!)^2$个可能的单元。由于我们分别对normal cell和reduction cell进行采样，因此搜索空间的最终大小为$(5×(B - 2)!)^4$。在我们的实验中，当$B = 7$时，搜索空间可以实现$1.3×10^{11}$个最终网络，使得搜索空间明显小于整个卷积网络的搜索空间(第2.3节)。</p>
 <h2 id="三-实验结果"><a href="#三-实验结果" class="headerlink" title="三  实验结果"></a>三  实验结果</h2><p>主实验为RNN实验：</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g36mbgiy7yj30sc0b4n01.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164504.png" alt></p>
 <p>在CNN上的表现：<strong>最重要的，通过权重共享，现在ENAS的训练时长是一块1080TI训练0.45天</strong></p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g34gt7rwbhj30yn0kwdmf.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521164654.png" alt></p>
 <p>训练得到的cell如下：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g36mama6vej30dy0mndhq.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144438.png" alt></p>
 
       
     </div>
@@ -903,7 +890,7 @@
 </span>
   <span class="post-meta-divider">|</span>
 
-  <span class="post-count">博客全站共20.5k字</span>
+  <span class="post-count">博客全站共20.6k字</span>
 </div>
 
 

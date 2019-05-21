@@ -111,19 +111,19 @@
 <meta property="og:site_name" content="Joey&#39;s Notes">
 <meta property="og:description" content="本文是NSANet的前置，比较详细的介绍了Google的NAS的整体设计，包括具体的目标函数以及实现skip connection的具体方法，主要是提出了用强化学习的方法来完成搜索神经网络架构。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30ui1oqbxj30g308cdgd.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g337uq96gtj30dt051mxn.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g33iv9ug57j30hu07sdi6.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g33h7ocj05j30gl04c0t6.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g33hucyawzj30f4068dgi.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g33i4sziabj30jb07uabu.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g33icc5gblj30k40fu77q.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g33ieuvnixj30g70o4gpp.jpg">
-<meta property="og:updated_time" content="2019-05-16T14:43:21.017Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521170403.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144036.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171146.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171453.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144116.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171720.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171849.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/006tNc79ly1g33ieuvnixj30g70o4gpp.jpg">
+<meta property="og:updated_time" content="2019-05-21T09:20:38.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-NAS">
 <meta name="twitter:description" content="本文是NSANet的前置，比较详细的介绍了Google的NAS的整体设计，包括具体的目标函数以及实现skip connection的具体方法，主要是提出了用强化学习的方法来完成搜索神经网络架构。">
-<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30ui1oqbxj30g308cdgd.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521170403.png">
 
 
 
@@ -447,7 +447,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-05-16 22:43:21" itemprop="dateModified" datetime="2019-05-16T22:43:21+08:00">2019-05-16</time>
+                <time title="Modified: 2019-05-21 17:20:38" itemprop="dateModified" datetime="2019-05-21T17:20:38+08:00">2019-05-21</time>
               
             
           </span>
@@ -506,11 +506,11 @@
 <p>ICLR2017</p>
 <p>本文是NSANet的前置，比较详细的介绍了Google的NAS的整体设计，包括具体的目标函数以及实现skip connection的具体方法，主要是提出了用强化学习的方法来完成搜索神经网络架构。</p>
 <h2 id="整体介绍"><a href="#整体介绍" class="headerlink" title="整体介绍"></a>整体介绍</h2><p>通过一个controllerRNN在搜索空间（search space）中得到一个网络结构（论文中称为child network），然后用这个网络结构在数据集上训练，在验证集上测试得到准确率R，再将这个准确率回传给controller，controller继续优化得到另一个网络结构，如此反复进行直到得到最佳的结果，整个过程称为Neural Architecture Search。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g30ui1oqbxj30g308cdgd.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521170403.png" alt></p>
 <p>正如上图，左侧为控制器，采用的是循环神经网络——具体来说是LSTM结构，采用了强化学习的Policy Gradient方式作为更新策略，每次以概率p采样一个网络结构A。采用LSTM作为控制器的最大原因是可以在可变长度的空间内进行架构搜索。</p>
 <p>右侧为子网络（采样架构A），它将在训练集上从头开始训练到收敛，然后在验证集上验证得到准确率R。R作为Reward来衡量p此时的梯度，反馈回控制器进行更新。</p>
 <h2 id="控制器RNN如何生成网络架构"><a href="#控制器RNN如何生成网络架构" class="headerlink" title="控制器RNN如何生成网络架构"></a>控制器RNN如何生成网络架构</h2><p>控制器生成的是网络架构中的超参数，NAS中假定预测的inference中只含卷积层。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g337uq96gtj30dt051mxn.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144036.png" alt></p>
 <p>对于Layer N，控制器可以预测该层的filter width，filter height，stride height，stride width，filter的个数，每一个预测都是通过softmax分类，并作为下一个预测的输入。实验中的停止条件是，层的个数超过了某个指定的数值。当然这个数值在训练的过程中也可以变化。</p>
 <p>最终得到的是LSTM产生的一个序列化的tokens，记为$\theta_{\mathrm{c}}$。</p>
 <h2 id="控制器的更新策略"><a href="#控制器的更新策略" class="headerlink" title="控制器的更新策略"></a>控制器的更新策略</h2><p>控制器采用的是强化学习的Policy Gradient，来进行更新。由于我之前没接触过强化学习，这里插一段Policy Gradient的基本原理，若了解可直接跳过。</p>
@@ -518,7 +518,7 @@
 <script type="math/tex; mode=display">
 L(\theta)=\sum \log \pi(a | s, \theta) f(s, a)</script><p>上式中$\log \pi(a | s, \theta)$表示在状态 $s$ 对所选动作 $a$的概率。而$f(s, a)$代表的是当前状态$s$下采取动作$a$所能得到的奖励，这是当前的奖励和未来奖励的贴现值的求和。也就是说，我们的策略梯度算法必须要完成一个完整的eposide才可以进行参数更新。</p>
 <p>核心思想是更新参数时有两个考虑：如果这个回合选择某一动作，下一回合选择该动作的概率大一些，然后再看奖惩值，如果奖惩是正的，那么会放大这个动作的概率，如果奖惩是负的，就会减小该动作的概率。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g33iv9ug57j30hu07sdi6.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171146.png" alt></p>
 <h3 id="NAS的更新策略"><a href="#NAS的更新策略" class="headerlink" title="NAS的更新策略"></a>NAS的更新策略</h3><p>将NAS与强化学习做一个对应，那么控制器LSTM就是Agent，控制器预测产生$\theta_{\mathrm{c}}$对应为活动$a_{1 : T}$，子网络在验证集上的准确率R作为reward signal。</p>
 <p>那么，就得到了目标函数：</p>
 <script type="math/tex; mode=display">
@@ -539,12 +539,12 @@ v_{t}=\frac{\beta * v_{t-1}+(1-\beta) * \theta_{t}}{1-\beta^{t}}</script><p>当$
 <h3 id="NAS的分布式训练"><a href="#NAS的分布式训练" class="headerlink" title="NAS的分布式训练"></a>NAS的分布式训练</h3><p>其中 parameter server共同保存了控制器的所有参数，这些server将参数分发给controller，每一个controller使用得到的参数进行模型的构建，这里由于得到的参数可能不同，构建模型的策略是随机的，导致每次构建的网络结构也会不同。</p>
 <p>每个controller会构建一个batch，也就是m个网络，然后并行地训练这些网络，得到它们的accuracy。也就是说，每一个controller会得到一个batch也就是m个网络，和它们的accuracy，然后根据之前提到的公式，计算参数的梯度。</p>
 <p>接着，计算完梯度的controller会将梯度发送给servers。这些server在得到梯度后，分别对自己负责的参数进行更新。更新后，当controller再次训练时，会得到更新后的参数。这里如果每个controller各自发送自己的梯度，之间不进行同步，就是异步更新。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g33h7ocj05j30gl04c0t6.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171453.png" alt></p>
 <h2 id="添加跳跃连接和其他操作"><a href="#添加跳跃连接和其他操作" class="headerlink" title="添加跳跃连接和其他操作"></a>添加跳跃连接和其他操作</h2><p>为了使搜索空间更为灵活，NAS采用一种set-selection型的attention机制添加skip connection。具体来说，通过添加在第N层添加N-1个anchor，来确定是否要与之前的某一层跳跃连接。anchor通过两层（本层和上一层）的hidden state，用sigmoid来判断：</p>
 <script type="math/tex; mode=display">
 \mathrm{P}(\text { Layer } \mathrm{j} \text { is an input to layer i })=\operatorname{sigmoid}\left(v^{\mathrm{T}} \tanh \left(W_{\text {prev}} * h_{j}+W_{\text {curr}} * h_{i}\right)\right)</script><p>公式中的$W_prev$、$W_curr$和$v$是可训练变量。这些行为依然是概率分布的，因此REINFORCE方法不会有大的改动。</p>
 <p>由下图可以形象的了解anchor point是怎样添加跳跃连接的。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g33hucyawzj30f4068dgi.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144116.png" alt></p>
 <p>关于添加skip connections后会出现的不统一问题，如输入的大小不一，或者某些层根本没有输入或者输出，处理方法有：</p>
 <ol>
 <li>如果一个层没有输入，那么就把图片作为输入</li>
@@ -553,17 +553,17 @@ v_{t}=\frac{\beta * v_{t-1}+(1-\beta) * \theta_{t}}{1-\beta^{t}}</script><p>当$
 </ol>
 <p>同样用anchor，可以添加其他操作，像pooling、loacl contrast normalization等，每一个操作在RNN中多添加一个节点。 </p>
 <h2 id="训练一个RNN网络"><a href="#训练一个RNN网络" class="headerlink" title="训练一个RNN网络"></a>训练一个RNN网络</h2><p>把递归单元看做成一棵树，$x_t$和$h_{t-1}$是输入，$h_t$是输出。控制器需要预测树的每个节点用什么链接方式：addition, elementwise multiplication等，或者激活函数：tanh, sigmoid等。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g33i4sziabj30jb07uabu.jpg" alt></p>
-<p>具体步骤参看原论文吧，讲的比较清楚。</p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171720.png" alt></p>
+<p>具体步骤参看原论文吧，控制器部分大同小异，主要是cell构造上采用了一种树形结构。</p>
 <p>以上为一个2个叶节点的树，实际实验中采用了8个叶节点。</p>
 <h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p>本篇的实验结果并无太多参考意义，因为很快作者就出了NASNet。NAS最大的意义还是在提出了一种神经网络搜索的框架结构。</p>
 <p>实验中采用了2层35个隐藏单元的LSTM，使用800个GPU训练了28天，一共22400 GPU-Hours，一共训练了12800个架构。</p>
 <p>在生成NAS-CNN的实验中，使用的是CIFAR-10数据集。网络中加入了BN和跳跃连接。卷积核的高的范围是[1, 3, 5, 7]，宽的范围也是[1, 3, 5, 7]，个数的范围是[24, 36, 48, 64]。步长分为固定为1和在 [1, 2, 3] 中两种情况。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g33icc5gblj30k40fu77q.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521171849.png" alt></p>
 <blockquote>
-<p>对于CNN的生成，论文附录贴了一个这样的图，下图中的网络在精度和深度之间达到不错的平衡。有意思的是，网络有不少滤波器是矩形的，而不是我们常用的正方形。而，更有意思的是，层越深，网络偏向于用更大的卷积核。</p>
+<p>对于CNN的生成，论文附录贴了一个这样的图，下图中的网络在精度和深度之间达到不错的平衡。有意思的是，网络有不少滤波器是矩形的，而不是我们常用的正方形。更有意思的是，层越深，网络偏向于用更大的卷积核。</p>
 </blockquote>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g33ieuvnixj30g70o4gpp.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/006tNc79ly1g33ieuvnixj30g70o4gpp.jpg" alt></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
 <li><a href="https://www.jianshu.com/p/3192f157d067" target="_blank" rel="noopener">https://www.jianshu.com/p/3192f157d067</a></li>
 <li>Policy Gradient：<a href="https://www.jianshu.com/p/2ccbab48414b" target="_blank" rel="noopener">https://www.jianshu.com/p/2ccbab48414b</a></li>
@@ -886,7 +886,7 @@ v_{t}=\frac{\beta * v_{t-1}+(1-\beta) * \theta_{t}}{1-\beta^{t}}</script><p>当$
 </span>
   <span class="post-meta-divider">|</span>
 
-  <span class="post-count">博客全站共20.5k字</span>
+  <span class="post-count">博客全站共20.6k字</span>
 </div>
 
 

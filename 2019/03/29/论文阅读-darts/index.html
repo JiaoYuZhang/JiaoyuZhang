@@ -111,21 +111,19 @@
 <meta property="og:site_name" content="Joey&#39;s Notes">
 <meta property="og:description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1aiml9o9kj30ia0i0wg5.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1aip9bswoj30m00kctbg.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1aiyw5juhj306o0dut9c.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1aj9k3khzj31080f643i.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k697frydj31o60e2tph.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6lwncmvj31m80u0hdt.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1k6p1emunj31240ki7jt.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6ooqv18j30oq0w2als.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg">
-<meta property="og:updated_time" content="2019-05-19T14:40:28.715Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231434.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231408.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231653.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153027.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153203.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153332.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521184609.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521185157.png">
+<meta property="og:updated_time" content="2019-05-21T10:52:46.677Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-darts">
 <meta name="twitter:description" content="利用梯度下降进行神经网络架构搜索，和之前的利用强化或者进化来做nas的效率有很大改进。">
-<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231434.png">
 
 
 
@@ -449,7 +447,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-05-19 22:40:28" itemprop="dateModified" datetime="2019-05-19T22:40:28+08:00">2019-05-19</time>
+                <time title="Modified: 2019-05-21 18:52:46" itemprop="dateModified" datetime="2019-05-21T18:52:46+08:00">2019-05-21</time>
               
             
           </span>
@@ -506,18 +504,16 @@
         <p>DARTS：架构搜索的可微解决</p>
 <p>论文： DARTS: Differentiable Architecture Search 【<a href="https://arxiv.org/abs/1806.09055" target="_blank" rel="noopener">pdf</a>】【 <a href="https://github.com/quark0/darts" target="_blank" rel="noopener">code</a>】</p>
 <p>作者：<a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Liu%2C+H" target="_blank" rel="noopener">Hanxiao Liu</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Simonyan%2C+K" target="_blank" rel="noopener">Karen Simonyan</a>, <a href="https://arxiv.org/search/cs?searchtype=author&amp;query=Yang%2C+Y" target="_blank" rel="noopener">Yiming Yang</a></p>
-<h2 id="第一部分-什么是神经网络架构搜索"><a href="#第一部分-什么是神经网络架构搜索" class="headerlink" title="第一部分 什么是神经网络架构搜索"></a>第一部分 什么是神经网络架构搜索</h2><h3 id="1-1-神经网络架构搜索（Neural-Architecture-Search）"><a href="#1-1-神经网络架构搜索（Neural-Architecture-Search）" class="headerlink" title="1.1 神经网络架构搜索（Neural Architecture Search）"></a>1.1 神经网络架构搜索（Neural Architecture Search）</h3><p>深度学习模型在很多任务上都取得了不错的效果，但调参对于深度模型来说是一项非常苦难的事情，众多的超参数和网络结构参数会产生爆炸性的组合，常规的 random search 和 grid search 效率非常低，因此最近几年神经网络的架构搜索和超参数优化成为一个研究热点。<br>NAS通常由三部分组成。首先确定search space，然后选择search strategy，最后选择评价策略并迭代优化。<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aiesn12ej313g09ytbk.jpg" alt><br>搜索空间：搜索空间定义了优化问题的变量。深度学习模型的性能是由网络架构参数和对应的超参数来决定的，因此只需要对复杂模型的架构参数和对应的超参数进行优化即可。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1aiml9o9kj30ia0i0wg5.jpg" width="250," height="250"></p>
+<h2 id="第一部分-什么是神经网络架构搜索"><a href="#第一部分-什么是神经网络架构搜索" class="headerlink" title="第一部分 什么是神经网络架构搜索"></a>第一部分 什么是神经网络架构搜索</h2><h3 id="1-1-神经网络架构搜索（Neural-Architecture-Search）"><a href="#1-1-神经网络架构搜索（Neural-Architecture-Search）" class="headerlink" title="1.1 神经网络架构搜索（Neural Architecture Search）"></a>1.1 神经网络架构搜索（Neural Architecture Search）</h3><p>深度学习模型在很多任务上都取得了不错的效果，但调参对于深度模型来说是一项非常苦难的事情，众多的超参数和网络结构参数会产生爆炸性的组合，常规的 random search 和 grid search 效率非常低，因此最近几年神经网络的架构搜索和超参数优化成为一个研究热点。<br>NAS通常由三部分组成。首先确定search space，然后选择search strategy，最后选择评价策略并迭代优化。<br><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231434.png" alt><br>搜索空间：搜索空间定义了优化问题的变量。深度学习模型的性能是由网络架构参数和对应的超参数来决定的，因此只需要对复杂模型的架构参数和对应的超参数进行优化即可。<br><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231408.png" width="250," height="250"></p>
 <p>最开始为链式的搜索空间，然后RNN中也采用了分支搜索。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1aip9bswoj30m00kctbg.jpg" width="250," height="250"></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231653.png" width="250," height="250"></p>
 <p>现在，通常使用cell来对搜索空间做“降维”，能够大大提高搜索速度。    </p>
 <p>搜索策略：定义了使用怎样的算法可以快速、准确找到最优的网络结构参数配置。常见的搜索方法包括：随机搜索、贝叶斯优化、进化算法、强化学习、基于梯度的算法。<br>评价预估：用一些低保真的训练集来训练模型，借鉴于工程优化中的代理模型，参数级别的迁移。单次（One-Shot）架构搜索。</p>
 <h3 id="1-2-主流架构搜索-不可微的“黑箱”优化"><a href="#1-2-主流架构搜索-不可微的“黑箱”优化" class="headerlink" title="1.2 主流架构搜索-不可微的“黑箱”优化"></a>1.2 主流架构搜索-不可微的“黑箱”优化</h3><p> 国内做AutoML，主流搜索算法是进化算法或者强化算法进行不可微搜索。强化学习：NAS、ENAS， 进化算法：</p>
 <h2 id="第二部分-DARTS架构"><a href="#第二部分-DARTS架构" class="headerlink" title="第二部分 DARTS架构"></a>第二部分 DARTS架构</h2><h3 id="2-1-darts的整体构架"><a href="#2-1-darts的整体构架" class="headerlink" title="2. 1 darts的整体构架"></a>2. 1 darts的整体构架</h3><p>首先，我们介绍一下Darts的搜索空间与整体流程。</p>
 <p>搜索空间：在本文中以一个cell（或者叫building block）作为一个搜索空间。它是由nodes和edges构成的有向无环图。每个node被记为 <script type="math/tex">x^{(i)}</script> ，是一个特征表示（比如feature map）。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1aiyw5juhj306o0dut9c.jpg" width="200" height="250" align="center"></p>
 <p>而每条边edge被记为<script type="math/tex">o^{(i,j)}</script>，它表示的是从节点<script type="math/tex">x^{(i)}</script>到<script type="math/tex">x^{(j)}</script>所采用的操作（比如3*3卷积，最大池化），当然也可以是特殊的无操作<script type="math/tex">zero</script>。这样我们就可以把搜索空间表示为：</p>
-<script type="math/tex; mode=display">x^{(i)}=\sum_{j<i} o^{(i, j)}\left(x^{(j)}\right)</script><p>经过darts的优化获得最后的cell架构后，我们既可以把它堆叠成CNN网络，也可以递归连接成RNN网络。对于每个cell，我们规定它有两个输入和一个输出。对于CNN网络，两个输入是前两层的输出；对于RNN，两个输入时这一层的输入和上一层的状态。<br>以此为基础，我们可以看一下darts的整体流程：<br><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1aj9k3khzj31080f643i.jpg" width="600" height="250" align="center"></p>
+<script type="math/tex; mode=display">x^{(i)}=\sum_{j<i} o^{(i, j)}\left(x^{(j)}\right)</script><p>经过darts的优化获得最后的cell架构后，我们既可以把它堆叠成CNN网络，也可以递归连接成RNN网络。对于每个cell，我们规定它有两个输入和一个输出。对于CNN网络，两个输入是前两层的输出；对于RNN，两个输入时这一层的输入和上一层的状态。<br>以此为基础，我们可以看一下darts的整体流程：<br><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153027.png" alt></p>
 <ol>
 <li>初始化时，每条边即操作是未知的</li>
 <li>采用松弛策略，使每条边上都进行多种候选操作</li>
@@ -547,7 +543,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
 <p>因为下层子问题的自变量$w$与上层问题的$L_{val}$无法直接用表达式表达出来，所以这个问题无法被简化为单层优化问题。双层问题的求解是非常复杂的，$\alpha$的每一次变化，$w$就需要重新求解一次。整个问题的时间复杂度可以达到$\mathrm{O}(|\mathrm{a}||\mathrm{w}|)$。</p>
 <p>而如何能够在实际中解决这个问题，我们需要采用一些近似优化的方法。</p>
 <h4 id="3-近似迭代优化：梯度下降"><a href="#3-近似迭代优化：梯度下降" class="headerlink" title="3. 近似迭代优化：梯度下降"></a>3. 近似迭代优化：梯度下降</h4><p>darts中采用了近似迭代的方法来解决这个问题，通过$w$和$\alpha$分别在权重和构架空间中的梯度下降步骤之间交替来完成优化。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1k697frydj31o60e2tph.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153203.png" alt></p>
 <p>我们来看这个优化算法，在第k步的时候，首先采用$\alpha{k-1}$的架构，通过$ \mathcal{L}_{t r a i n}\left(w_{k-1}, \alpha_{k-1}\right) $获得现在的权重$ w{k}$，利用梯度更新一步$ w{k}$， 再固定$ w{k}$，进行主问题的优化：</p>
 <script type="math/tex; mode=display">
 \mathcal{L}_{v a l}\left(w^{\prime}, a_{k-1}\right)=\mathcal{L}_{v a l}\left(w_{k}-\xi \nabla_{w} \mathcal{L}_{t r a i n}\left(w_{k}, \alpha_{k-1}\right), a_{k-1}\right)</script><p>其中，$\xi $是$ w$的学习率。$w_{k}-\xi \nabla_{w} \mathcal{L}_{t r a i n}\left(w_{k}, \alpha_{k-1}\right)$这一项就是表示$ w{k}$的一步梯度更新。</p>
@@ -559,7 +555,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
 \nabla_{\alpha, w}^{2} \mathcal{L}_{t r a i n}(w, \alpha) \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right) \approx \frac{\nabla_{\alpha} \mathcal{L}_{t r a i n}\left(w^{+}, \alpha\right)-\nabla_{\alpha} \mathcal{L}_{t r a i n}\left(w^{-}, \alpha\right)}{2 \epsilon}</script><p>其中，有$w^{+}=w+\epsilon \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right)$和$w^{-}=w-\epsilon \nabla_{w^{\prime}} \mathcal{L}_{v a l}\left(w^{\prime}, \alpha\right)$。</p>
 <p>计算有限差分只需要两次权值前传和两次向后传递，复杂度从$\mathrm{O}(|\mathrm{a}||\mathrm{w}|)$降低为$\mathrm{O}(|\mathrm{a}|+|\mathrm{w}|)$。</p>
 <p>可以考虑一个特殊情况，学习率为0的时候，上式就变成了一个一阶近似。而$\alpha$的梯度则完全取决于前一项。这样的话，$\alpha$和$w$就相对独立了，但是这种情况下虽然速度有了提高，效果却下降的厉害。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6lwncmvj31m80u0hdt.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153332.png" alt></p>
 <h4 id="4-还原为离散网络结构"><a href="#4-还原为离散网络结构" class="headerlink" title="4. 还原为离散网络结构"></a>4. 还原为离散网络结构</h4><p>最后得到了架构的参数a，要将它还原为离散的网络构架，我们进行两步操作：</p>
 <ol>
 <li><p>为每个节点选取最强的k个预处理，这个k的选取依据以下公式。为了和其他网络结构保持可对比性，我们的卷积单元k=2，循环单元k=1。</p>
@@ -569,10 +565,9 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
 </li>
 </ol>
 <p>以下为两个训练出来的结果：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1k6p1emunj31240ki7jt.jpg" width="250," height="250"></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1k6ooqv18j30oq0w2als.jpg" width="250," height="250"></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521184609.png" alt></p>
 <h3 id="2-3-实验结果"><a href="#2-3-实验结果" class="headerlink" title="2.3 实验结果"></a>2.3 实验结果</h3><p>在这部分，具体的实验细节就不提供了，本文中在CIFAR-10数据集上进行CNN的cell训练。对于CNN网络，darts一共训练两种cell：normal cell和reduction cell。区别在于stride，前者为1，后者为2后再网络三分之一处和三分之二处。在Penn Treebank上训练RNN cell。只有一种单元。如下图显示，整个构架搜索是初始化敏感的，CNN cell经过长时间训练后能得到比较好的收敛，但是RNN cell的结果与初始化关系比较密切。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1k6ung22xj30xw0dkk5b.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521185157.png" alt></p>
 <p>第二部分的评估，是将训练好的cell迁移到ImageNet或者WikiText-2上进行测试。在ImageNet上的效果是比较好的，而WikiText-2上的效果一般，可能原因是文本数据集差异过大。</p>
 <h2 id="第三部分-疑问"><a href="#第三部分-疑问" class="headerlink" title="第三部分 疑问"></a>第三部分 疑问</h2><ol>
 <li>为什么权值更新采用momentum梯度更新法？</li>
@@ -897,7 +892,7 @@ w^{*}(\alpha)=\operatorname{argmin}_{w}  \mathcal{L}_{t r a i n}(w, \alpha)</scr
 </span>
   <span class="post-meta-divider">|</span>
 
-  <span class="post-count">博客全站共20.5k字</span>
+  <span class="post-count">博客全站共20.6k字</span>
 </div>
 
 

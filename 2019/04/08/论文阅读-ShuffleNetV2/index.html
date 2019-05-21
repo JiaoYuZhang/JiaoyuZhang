@@ -111,18 +111,18 @@
 <meta property="og:site_name" content="Joey&#39;s Notes">
 <meta property="og:description" content="现在的网络结构的衡量通常通过不直接的衡量标准像FLOPS等，但是直接衡量标准比如速度其实取决于很多其他原因，内存访问成本和平台因素都有很大关系。本文的工作就是直接在目标平台衡量直接标准速度，而不仅仅是考虑FLOPS。基于一系列对照实验，本文给出了一些设计效率网络的建议。本文也给出了一个新的网络结构ShuffleNetV2。完全的消融实验证实了本文的模型是截止目前最优秀的速度与准确率的结合。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g1uz7f50v3j313k0tgn5o.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g1uz8k3px4j314i0fu13l.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g1uzdt1226j314o0cejuw.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0nb82c0j314c0cegoo.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0of9uk2j313q0osn30.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g1v0qpb07cj314g0muq8c.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g1v0rpffvjj314i0fujwf.jpg">
-<meta property="og:updated_time" content="2019-04-08T03:11:49.970Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183304.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183502.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183559.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183637.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183749.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183823.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521184000.png">
+<meta property="og:updated_time" content="2019-05-21T10:40:29.350Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文阅读-ShuffleNetV2">
 <meta name="twitter:description" content="现在的网络结构的衡量通常通过不直接的衡量标准像FLOPS等，但是直接衡量标准比如速度其实取决于很多其他原因，内存访问成本和平台因素都有很大关系。本文的工作就是直接在目标平台衡量直接标准速度，而不仅仅是考虑FLOPS。基于一系列对照实验，本文给出了一些设计效率网络的建议。本文也给出了一个新的网络结构ShuffleNetV2。完全的消融实验证实了本文的模型是截止目前最优秀的速度与准确率的结合。">
-<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g1uz7f50v3j313k0tgn5o.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183304.png">
 
 
 
@@ -429,12 +429,24 @@
                 
               
 
-              <time title="Created: 2019-04-08 10:39:10 / Modified: 11:11:49" itemprop="dateCreated datePublished" datetime="2019-04-08T10:39:10+08:00">2019-04-08</time>
+              <time title="Created: 2019-04-08 10:39:10" itemprop="dateCreated datePublished" datetime="2019-04-08T10:39:10+08:00">2019-04-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-21 18:40:29" itemprop="dateModified" datetime="2019-05-21T18:40:29+08:00">2019-05-21</time>
               
             
           </span>
@@ -493,7 +505,7 @@
 <p>2018.7</p>
 <h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>轻量化模型比较好的几个模型：Xception [12], MobileNet [13], MobileNet V2 [14], ShuffleNet [15], and CondenseNet [16]。</p>
 <p>关于衡量标准，通常使用的是非直接标准FLOPS（浮点操作数），但是FLOPS并不一定决定直接标准speed和latency。比如MobileNetV2和NASNET-A有相似的FLOPS，但是MobileNetV2速度更快。具体的差距在图1中。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g1uz7f50v3j313k0tgn5o.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183304.png" alt></p>
 <p>造成FLOPS与speed不同步的主要原因有两个：</p>
 <p>1.没考虑一些影响速度的额外因素，memory access cost（MAC）和并行度。MAC是算力强大的GPU的瓶颈。并行化程度越深，相同FLOPS的运算速度越快。</p>
 <p>2.相同FLOPS的操作在不同的平台的运行时间是不同的。比如，张量分解在最近的一些工作中用来分解矩阵乘法，但是最近研究表明分解操作虽然减少了75%的FLOPS但会在GPU上更慢。我们调查了这一现象，发现原因是最新的CUDNN库为3<em>3卷积特别进行了优化。我们不能再简单认为3</em>3卷积就是比1*1卷积慢了9倍。</p>
@@ -502,32 +514,32 @@
 <p>GPU平台使用的是一台1080Ti，卷积库使用CUDNN7.0。我们也激活了SUDNN的benchmarking功能来选择不同卷积操作的最快实现算法。</p>
 <p>ARM平台使用一块高通骁龙810。本文采用了基于NEON的高优化实现方案。测试集使用单线程。</p>
 <p>其他设置包括：开启全优化操作（使用tensor fusion）。输入图像大小224*224.每个网络都是任意初始化，测试了100次，采用平均时间。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g1uz8k3px4j314i0fu13l.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183502.png" alt></p>
 <p>在图2中，本文比较了ShuffleNetV1和MobileNetV2在不同平台上的操作时间占比其实是不同的。FLOPS只考虑了卷积操作部分。虽然卷积操作占比为主要，但是数据传输、数据打乱和元素级操作（张量加、ReLU等）也占据了相当比分的时间。</p>
 <p><strong>G1) Equal channel width minimizes memory access cost (MAC).</strong>相等的通道宽度能最小化内存访问代价。现代网络结构通常会采用深度可分卷积，其中点卷积构成了最大的复杂度。仔细研究点卷积的核的形状。它由两个参数决定：输入通道数$c_1$和输出通道数$c_2$。$h$和$w$表示特征图的空间尺寸，那么点卷积的FLOPS就为$B=hwc_1c_2$.</p>
 <p>为了简化说明，这里假设计算设备的cache足够大到存储整个feature maps和参数。那么，访存操作数就是$MAC = hw（c_1+c_2）+c_1c_2$.两个变量特别相关于访存，是input/output feature maps and kernel weights。对应不等式：</p>
 <script type="math/tex; mode=display">
 \mathrm{MAC} \geq 2 \sqrt{h w B}+\frac{B}{h w}</script><p>由此可见，MAC有FLOPS一个很低的关联，当输入输出通道数相等时它的相关度会更低。</p>
 <p>这是一个理论化的结果。实践中，很多设备的闪存根本不够大。还有其他计算设计问题，因此我们直接设计了一个对比试验。一个网络结构由十个构建块堆叠成。每块包含两个卷积层。在保证FLOPS的前提下，我们调整$c_1$与$c_2$的比例，结果如表1.</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1uzdt1226j314o0cejuw.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183559.png" alt></p>
 <p><strong>G2) Excessive group convolution increases MAC.</strong>过多的组卷积会增加MAC。群卷积是现代网络结构的核心[7,15,25,26,27,28]。它通过将所有通道之间的密集卷积变为稀疏(仅在通道组内)来降低计算复杂度(FLOPs)。一方面，它允许在给定固定故障的情况下使用更多的通道，并增加了网络容量(从而提高了准确性)。然而，另一方面，频道数量的增加导致更多的MAC。</p>
 <p>基于G1的推导，在1*1的点卷积中的MAC与FLOPs的关系为：</p>
 <script type="math/tex; mode=display">
-\begin{aligned} \mathrm{MAC} &=h w\left(c_{1}+c_{2}\right)+\frac{c_{1} c_{2}}{g} \\ &=h w c_{1}+\frac{B g}{c_{1}}+\frac{B}{h w} \end{aligned}</script><p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0nb82c0j314c0cegoo.jpg" alt></p>
+\begin{aligned} \mathrm{MAC} &=h w\left(c_{1}+c_{2}\right)+\frac{c_{1} c_{2}}{g} \\ &=h w c_{1}+\frac{B g}{c_{1}}+\frac{B}{h w} \end{aligned}</script><p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183637.png" alt></p>
 <p>因此，我们建议，组数应该基于平台和任务慎重选择。仅仅只为了更多的通道数而用更大的组数是不理智的，因为准确的增长可能比不过为此付出的计算代价的增长。</p>
 <p><strong>G3) Network fragmentation reduces degree of parallelism.</strong>网络碎片会减少并行度。</p>
 <p>碎片化操作对于准确率有提高，但是对高并行化设备比如GPU不友好。</p>
 <p><strong>G4) Element-wise operations are non-negligible.</strong>元素级操作不可忽略。</p>
 <h2 id="三-ShuffleNet-V2"><a href="#三-ShuffleNet-V2" class="headerlink" title="三 ShuffleNet V2"></a>三 ShuffleNet V2</h2><p>对于ShuffleNet v1中的组点卷积和瓶颈结构都会增加MAC，而且对于轻量级模型是不可忽略的。为了改善上述问题，本文提出了Channel Split。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g1v0of9uk2j313q0osn30.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183749.png" alt></p>
 <p>也就是在每个单元的开头将输入的c个通道分割成两个分支，一个为$c-c^`$，另一个有$c^`$个通道。遵循G3，左边的分支保持了恒等。而右边的分支保证了输入输出通道数的相同满足G1。两个点卷积操作不再进行组卷积，一方面为了遵循G2，另一方面通道分割已经分出了两组。</p>
 <p>在卷积完成后，两个分支直接进行拼接。拼接完成后，再进行channel shuffle。之后就接下一个单元，不再进行ShuffleNetV1中的ADD操作。元素操作比如ReLU和可分卷积只存在在一个分支中。另外拼接、通道洗牌、通道分割都合并为一个单一的元素操作。</p>
 <p>为了做空间下采样，单元也被做了简单的修改如图3.d。这里得$c^`$为了方便直接设为c的一半，ShuffleNet V2的最后结构如表格5.</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g1v0qpb07cj314g0muq8c.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521183823.png" alt></p>
 <p>与ShuffleNet V1整体结构唯一不同的是，在全局平均池化层之前添加了一个点卷积层来混合通道。</p>
 <p>对于ShuffleNet V2的分析，首先高效性使得每个构建块都能使用更多的特征通道。其次，一半通道直接进入下一个构建块可以视为某种程度的feature reuse。</p>
 <h2 id="四-实验"><a href="#四-实验" class="headerlink" title="四 实验"></a>四 实验</h2><p>在COCO数据集上，基础框架是Light-Head RCNN。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g1v0rpffvjj314i0fujwf.jpg" alt></p>
+<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521184000.png" alt></p>
 <h2 id="五-总结"><a href="#五-总结" class="headerlink" title="五 总结"></a>五 总结</h2><p>本文建议网络架构设计应考虑速度等直接指标，而不是FLOPs等间接指标。我们提出了实用的指导方针和一个新的架构，ShuffleNet v2。综合实验验证了该模型的有效性。</p>
 
       
@@ -847,7 +859,7 @@
 </span>
   <span class="post-meta-divider">|</span>
 
-  <span class="post-count">博客全站共20.5k字</span>
+  <span class="post-count">博客全站共20.6k字</span>
 </div>
 
 
