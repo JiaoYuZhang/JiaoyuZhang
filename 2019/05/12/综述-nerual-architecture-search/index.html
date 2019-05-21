@@ -113,10 +113,6 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231434.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231408.png">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i-1">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=A+%3D+L_n+%5Ccirc+...L_1+%5Ccirc+L_0">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=n">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231742.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231653.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231911.png">
@@ -147,7 +143,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521155913.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521155941.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521160014.png">
-<meta property="og:updated_time" content="2019-05-21T08:00:37.869Z">
+<meta property="og:updated_time" content="2019-05-21T08:17:38.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="综述-nerual architecture search">
 <meta name="twitter:description" content="对于目前的NAS领域进行一个总结，各种算法都采用了哪些策略来实现搜索空间、搜索策略和评估策略三个方面。">
@@ -475,7 +471,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-05-21 16:00:37" itemprop="dateModified" datetime="2019-05-21T16:00:37+08:00">2019-05-21</time>
+                <time title="Modified: 2019-05-21 16:17:38" itemprop="dateModified" datetime="2019-05-21T16:17:38+08:00">2019-05-21</time>
               
             
           </span>
@@ -541,9 +537,9 @@
 <p><strong>搜索策略（Searchstrategy）</strong>：搜索策略定义的则怎样去搜索。一方面，我们希望能快速找到性能良好的架构，另一方面，也应避免过早收敛到次优架构（suboptimalarchiteture）区域。</p>
 <p><strong>性能评估策略（Performaceestimation strategy）</strong>：NAS 的目标是希望能够自动的在给定的数据集上找到一个高性能的架构。性能评估则是指评估此性能的过程：最简单的方式是按照通常的方式对一个标准架构训练和验证来获得结果，但遗憾的是这样的计算成本太高了，并且同时限制了可以搜索的网络架构的数量。因此，最近的许多研究都集中在探索新的方法来降低这些性能评估的成本。</p>
 <h3 id="搜索空间（Search-Space）"><a href="#搜索空间（Search-Space）" class="headerlink" title="搜索空间（Search Space）"></a>搜索空间（Search Space）</h3><p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190520231408.png" alt></p>
-<p>如图所示的就是一个相对简单的搜索空间，称为<strong>链式神经网络（Chain-stuctured Neural Network）</strong>，很简单就是一个链表，第 <img src="https://www.zhihu.com/equation?tex=i-1" alt="i-1"> 层的输出作为第 <img src="https://www.zhihu.com/equation?tex=+i" alt=" i"> 层的输入，可以表示为 <img src="https://www.zhihu.com/equation?tex=A+%3D+L_n+%5Ccirc+...L_1+%5Ccirc+L_0" alt="A = L_n \circ ...L_1 \circ L_0"> 。而针对于这样一个 search space，我们就需要考虑这些参数：</p>
+<p>如图所示的就是一个相对简单的搜索空间，称为<strong>链式神经网络（Chain-stuctured Neural Network）</strong>，很简单就是一个链表，第 $i-1$层的输出作为第 $i$ 层的输入，可以表示为 $A=L_{n} \circ \ldots L_{1} \circ L_{0}$。而针对于这样一个 search space，我们就需要考虑这些参数：</p>
 <ul>
-<li>网络的(最大)层数 <img src="https://www.zhihu.com/equation?tex=n" alt="n"></li>
+<li>网络的(最大)层数$n$</li>
 <li>每一层执行的操作类型，比如 pooling， convolution 这样的基础操作，或者更高级的一些操作，如depthwise separable convolutions 或 dilated convolutions。</li>
 <li>每一层与这个操作相关的 hyperparameters，比如对于一个一般的 convolutional 层来说，有 filter 的 numbers，keneral 的 size 和 strides 的 length，而对于 fully-connected 层来说就说是 units 的 number 了。</li>
 </ul>
@@ -590,13 +586,11 @@
 <p>它是NSANet的前置，比较详细的介绍了Google的NAS的整体设计，包括具体的目标函数以及实现skip connection的具体方法，主要是提出了用强化学习的方法来完成搜索神经网络架构。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521143954.png" alt></p>
 <p>通过一个controllerRNN在搜索空间（search space）中得到一个网络结构（论文中称为child network），然后用这个网络结构在数据集上训练，在验证集上测试得到准确率R，再将这个准确率回传给controller，controller继续优化得到另一个网络结构，如此反复进行直到得到最佳的结果，整个过程称为Neural Architecture Search。</p>
-<p><strong>How to use a controller RNN to generate an CNN model</strong></p>
-<p>控制器生成的是网络架构中的超参数，NAS中假定预测的inference中只含卷积层。</p>
+<h4 id="How-to-use-a-controller-RNN-to-generate-an-CNN-model"><a href="#How-to-use-a-controller-RNN-to-generate-an-CNN-model" class="headerlink" title="How to use a controller RNN to generate an CNN model"></a><strong>How to use a controller RNN to generate an CNN model</strong></h4><p>控制器生成的是网络架构中的超参数，NAS中假定预测的inference中只含卷积层。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144036.png" alt></p>
 <p>对于Layer N，控制器可以预测该层的filter width，filter height，stride height，stride width，filter的个数，每一个预测都是通过softmax分类，并作为下一个预测的输入。实验中的停止条件是，层的个数超过了某个指定的数值。当然这个数值在训练的过程中也可以变化。</p>
 <p>最终得到的是LSTM产生的一个序列化的tokens，记为$\theta_{\mathrm{c}}$。</p>
-<p><strong>How to train a controller RNN with REINFORCE</strong></p>
-<p>将NAS与强化学习做一个对应，那么控制器LSTM就是Agent，控制器预测产生$\theta_{\mathrm{c}}$对应为活动$a_{1 : T}$，子网络在验证集上的准确率R作为reward signal。</p>
+<h4 id="How-to-train-a-controller-RNN-with-REINFORCE"><a href="#How-to-train-a-controller-RNN-with-REINFORCE" class="headerlink" title="How to train a controller RNN with REINFORCE"></a><strong>How to train a controller RNN with REINFORCE</strong></h4><p>将NAS与强化学习做一个对应，那么控制器LSTM就是Agent，控制器预测产生$\theta_{\mathrm{c}}$对应为活动$a_{1 : T}$，子网络在验证集上的准确率R作为reward signal。</p>
 <p>那么，就得到了目标函数：</p>
 <script type="math/tex; mode=display">
 J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>鉴于R是不连续的，我们采用policy gradient来迭代更新$\theta_{\mathrm{c}}$，具体采用了REINFORCE规则：</p>
@@ -607,8 +601,7 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <p>上述是梯度的一种无偏估计，但是方差很高。为减小方差，添加了一个baseline：</p>
 <script type="math/tex; mode=display">
 \frac{1}{m} \sum_{k=1}^{m} \sum_{t=1}^{T} \nabla_{\theta_{c}} \log P\left(a_{t} | a_{(t-1) : 1} ; \theta_{c}\right)\left(R_{k}-b\right)</script><p>由于baseline fuction b不依赖与当下action，本式依然是一个无偏估计。b采用的之前架构准确率的指数加权平均（exponential moving average）。</p>
-<p><strong>How to add skip connections and other layer types</strong></p>
-<p>NAS采用注意力机制。具体来说，通过添加在第N层添加N-1个anchor，来确定是否要与之前的某一层跳跃连接。anchor通过两层（本层和上一层）的hidden state，用sigmoid来判断：</p>
+<h4 id="How-to-add-skip-connections-and-other-layer-types"><a href="#How-to-add-skip-connections-and-other-layer-types" class="headerlink" title="How to add skip connections and other layer types"></a><strong>How to add skip connections and other layer types</strong></h4><p>NAS采用注意力机制。具体来说，通过添加在第N层添加N-1个anchor，来确定是否要与之前的某一层跳跃连接。anchor通过两层（本层和上一层）的hidden state，用sigmoid来判断：</p>
 <script type="math/tex; mode=display">
 \mathrm{P}(\text { Layer } \mathrm{j} \text { is an input to layer i })=\operatorname{sigmoid}\left(v^{\mathrm{T}} \tanh \left(W_{\text {prev}} * h_{j}+W_{\text {curr}} * h_{i}\right)\right)</script><p>公式中的$W_prev$、$W_curr$和$v$是可训练变量。这些行为依然是概率分布的，因此REINFORCE方法不会有大的改动。</p>
 <p>由下图可以形象的了解anchor point是怎样添加跳跃连接的。</p>
@@ -620,8 +613,7 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <p>相较于NAS的优化：</p>
 <p>一种新的搜索空间- NASNet search space—-a generic convolutional cell</p>
 <p>一种新的正则化技术，ScheduledDropPath，使得NASNet模型的泛化能力更好(实验细节，不太重要)</p>
-<p><strong>NASNet cell</strong></p>
-<p>不再进行整个网络的搜索，而是定义了cell单元作为building block。通过堆叠cell形成最后的网络。</p>
+<h4 id="NASNet-cell"><a href="#NASNet-cell" class="headerlink" title="NASNet cell"></a><strong>NASNet cell</strong></h4><p>不再进行整个网络的搜索，而是定义了cell单元作为building block。通过堆叠cell形成最后的网络。</p>
 <p>具体讨论的话，对于CNN网络，采用了两种cell，<strong>normal cell</strong>和<strong>reduction cell</strong>。normal cell的输出保持维度不变，而reduction cell用于收缩维度，具体来说就是步长为2。两种单元是不同的架构，堆叠在一起形成了最后的网络架构。</p>
 <p>控制器RNN输出的是两种cell的超参，最后以下图形式堆叠为子网络，进行训练和验证，得到验证集准确率R回馈到控制器。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144401.png" alt></p>
@@ -630,8 +622,7 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144305.png" alt></p>
 <p>在算法中，用之前已经存在的隐藏态作为序列分块的可能输入来填入新建的hidden state。B=5时效果较好，即一个cell中包含5个操作。</p>
 <p>为了使RNN能同时预测Normal Cell和Reduction Cell，我们简单设定控制器有2*5B个预测步骤。前5B给Normal Cell，后5B给Reduction Cell。</p>
-<p><strong>实验结果</strong></p>
-<p>在具体训练阶段，控制器采用Proximal Policy Optimazation（PPO）策略，用RNN控制一个全局工作序列系统来生成一个子网络的备选池。</p>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a><strong>实验结果</strong></h4><p>在具体训练阶段，控制器采用Proximal Policy Optimazation（PPO）策略，用RNN控制一个全局工作序列系统来生成一个子网络的备选池。</p>
 <p>训练时长为500个GPU训练4天，总计2000GPU时。比初始NAS快了7倍，但是还是非常奢侈。</p>
 <p>训练得到的卷积cell：</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521144438.png" alt></p>
@@ -644,8 +635,7 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <p><strong>最关键是利用子模型之间共享参数，大大减少了训练时长。</strong>采用了控制器参数与子网络参数相互迭代的方式进行训练。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521145805.png" alt></p>
 <p>本处为了通篇逻辑，也使用ENAS中CNN cell的训练过程来描述。RNN网络训练过程请参考原文。</p>
-<p><strong>搜索空间</strong></p>
-<p>基本沿用NASNet。</p>
+<h4 id="搜索空间"><a href="#搜索空间" class="headerlink" title="搜索空间"></a><strong>搜索空间</strong></h4><p>基本沿用NASNet。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521152634.png" alt></p>
 <p>用一个例子来说明搜索空间的机制，这里是B = 4个节点(参见图5)。</p>
 <ol>
@@ -654,16 +644,14 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <li>在节点4:控制器采样节点3、节点1为 avg pooling3x3和sep conv 3x3。这意味着$h_4 = avg_pool_3x3(h_3) + sep_conv_3x3(h_1)$。</li>
 <li>由于除h4之外的所有节点都被用作至少另一个节点的输入，因此惟一的松散端h4被视为单元的输出。如果有多个松散的端点，它们将沿着深度维度连接起来，形成单元格的输出。</li>
 </ol>
-<p><strong>架构搜索与训练权重迭代进行</strong></p>
-<p>在ENAS,有两套可学的参数:控制器LSTM的参数θ,和子模型的共享参数ω。ENAS的培训过程包括两个交叉阶段。</p>
+<h4 id="架构搜索与训练权重迭代进行"><a href="#架构搜索与训练权重迭代进行" class="headerlink" title="架构搜索与训练权重迭代进行"></a><strong>架构搜索与训练权重迭代进行</strong></h4><p>在ENAS,有两套可学的参数:控制器LSTM的参数θ,和子模型的共享参数ω。ENAS的培训过程包括两个交叉阶段。</p>
 <ul>
 <li>第一阶段通过一整个训练集训练子模型共享参数w。在本文的Penn Treebank实验中，ω是训练大约400 steps,每个minibatch使用64个样本,采用梯度反向传播+梯度截断（<strong>Truncated Gradient</strong>）进行优化，每隔35 steps进行一次隔断。同时,在CIFAR-10上,ω是45,000张训练图像,分为minibatches大小128,∇ω计算使用标准的反向传播。</li>
 <li>第二阶段训练参数控制器LSTM的参数θ, 对于固定数量的步骤,通常在我们的实验设置为2000。这两个阶段在ENAS的培训期间交替进行。</li>
 </ul>
 <p><strong>Deriving Architectures.</strong> </p>
 <p>如何在训练好的ENAS模型中派生出全新的结构。首先从训练好的策略π(m, θ)中采样几个模型。针对每个模型，通过验证集的一个minibatch计算reward。选取其中reward最高的模型从零开始预训练。</p>
-<p><strong>实验结果</strong></p>
-<p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521152749.png" alt></p>
+<h4 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a><strong>实验结果</strong></h4><p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521152749.png" alt></p>
 <h2 id="Latest-architecture-search-algorithms"><a href="#Latest-architecture-search-algorithms" class="headerlink" title="Latest architecture search algorithms"></a>Latest architecture search algorithms</h2><p>上述NAS三篇论文是一脉相承，一点点改进过来的。其实我最开始接触的论文是Darts，当时感觉这个结构是全新的。再一路看下来，会发现Darts也是在ENAS上又做了搜索策略部分的革新，整体的架构也还是继承下来的。</p>
 <h3 id="Darts"><a href="#Darts" class="headerlink" title="Darts"></a>Darts</h3><p>论文： DARTS: Differentiable Architecture Search 【<a href="https://arxiv.org/abs/1806.09055" target="_blank" rel="noopener">pdf</a>】【 <a href="https://github.com/quark0/darts" target="_blank" rel="noopener">code</a>】</p>
 <p>本文中最大的改进就是把选择op这样一个不可微操作通过softmax放宽为可微函数，由此使得在架构选择时可以采用梯度下降的方法来解决。</p>
@@ -675,19 +663,16 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <li>采用bilevel optimazation来联合优化操作的混合概率和网络权重</li>
 <li>采用混合操作中概率最高的操作来替换混合操作，得到最终结构</li>
 </ol>
-<p><strong>搜索空间的可微化处理</strong></p>
-<p>把搜索空间表示为</p>
+<h4 id="搜索空间的可微化处理"><a href="#搜索空间的可微化处理" class="headerlink" title="搜索空间的可微化处理"></a><strong>搜索空间的可微化处理</strong></h4><p>把搜索空间表示为</p>
 <script type="math/tex; mode=display">x^{(i)}=\sum_{j<i} o^{(i, j)}\left(x^{(j)}\right)</script><p>每个node被记为 $x^{(i)}$是一个特征表示（比如feature map）。而每条边edge被记为$o^{(i,j)}$，它表示的是从节$x^{(i)}$到$x^{(j)}$所采用的操作（比如3*3卷积，最大池化），当然也可以是特殊的无操作$zero$。</p>
 <p>darts通过引入softmax来做了一个简单的松弛方案，使得整个搜索空间变为可微的:</p>
 <script type="math/tex; mode=display">
 \overline{O}^{(i, j)}(x)=\sum_{o \in \mathcal{O}} \frac{\exp \left(\alpha_{o}^{(i, j)}\right)}{\sum_{o^{\prime} \in \mathcal{O}} \exp \left(\alpha_{o^{\prime}}^{(i, j)}\right)} o(x)</script><p>其中<script type="math/tex">\alpha^{(i, j)}</script>是一个向量，表示的是节点$ (i, j) $中的混合操作，$\overline{o}^{(i, j)}$是混合概率操作， $ \mathcal{O} $是候选操作集合。</p>
 <p>$\alpha$ 就是整体框架的向量表示。</p>
-<p><strong>迭代训练框架参数$\alpha$和权重参数$w$</strong></p>
-<p>目标函数：    </p>
+<h4 id="迭代训练框架参数-alpha-和权重参数-w"><a href="#迭代训练框架参数-alpha-和权重参数-w" class="headerlink" title="迭代训练框架参数$\alpha$和权重参数$w$"></a><strong>迭代训练框架参数$\alpha$和权重参数$w$</strong></h4><p>目标函数：    </p>
 <script type="math/tex; mode=display">\begin{array}{cl}{\min _{\alpha}} & {\mathcal{L}_{v a l}\left(w^{*}(\alpha), \alpha\right)} \\ {\text { s.t. }} & {w^{*}(\alpha)=\operatorname{argmin}_{w} \mathcal{L}_{\text {train}}(w, \alpha)}\end{array}</script><p>darts中采用了近似迭代的方法来解决这个问题，通过$w$和$\alpha$分别在权重和构架空间中的梯度下降步骤之间交替来完成优化。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153203.png" alt></p>
-<p><strong>实验结果</strong></p>
-<p>在CIFAR-10上训练效果：</p>
+<h4 id="实验结果-2"><a href="#实验结果-2" class="headerlink" title="实验结果"></a><strong>实验结果</strong></h4><p>在CIFAR-10上训练效果：</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153332.png" alt></p>
 <p>将cell迁移到ImageNet上的结果：</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521153431.png" alt></p>
@@ -701,30 +686,23 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <p>（3）将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN；</p>
 <p>（4）在ImageNet 1000-class任务上验证RandWireNN的表现；</p>
 <p>（5）重复（1）到（4）步骤。</p>
-<p><strong>一、基于图论的随机图方法生成随机图Random Graph</strong></p>
-<p>作者引入了三种随机图生成方法，即Erdos-Renyi（ER）、Barabasi-Albert（BA）和 Watts-Strogatz（WS）。这三个方法生成随机图的机制比较简单。</p>
+<h4 id="一、基于图论的随机图方法生成随机图Random-Graph"><a href="#一、基于图论的随机图方法生成随机图Random-Graph" class="headerlink" title="一、基于图论的随机图方法生成随机图Random Graph"></a><strong>一、基于图论的随机图方法生成随机图Random Graph</strong></h4><p>作者引入了三种随机图生成方法，即Erdos-Renyi（ER）、Barabasi-Albert（BA）和 Watts-Strogatz（WS）。这三个方法生成随机图的机制比较简单。</p>
 <ul>
-<li><p>ER: N个节点，节点两两之间以P的概率有一条边。该方法包含一个参数P，故以ER(P)表示。</p>
-</li>
-<li><p>BA: 初始有M个节点（M&lt;N），每增加1个新节点的时候，该节点以一定的概率与已有的所有节点相连（这个概率与已有节点的度有关），重复，直到这个新节点有M条边。重复，直到整个图有N个节点。该方法包含一个参数M，故以BA(M)表示。</p>
-</li>
-<li><p>WS: 所有N个节点排成一个圈，每个节点与两边邻近的K/2个节点相连。之后按照顺时针方向遍历每一个节点，与当前节点相连的某一条边以概率P与其他某个节点相连。重复K/2次。该方法包含2个参数K和P，故以WS(K,P)表示。</p>
-</li>
+<li>ER: N个节点，节点两两之间以P的概率有一条边。该方法包含一个参数P，故以ER(P)表示。</li>
+<li>BA: 初始有M个节点（M&lt;N），每增加1个新节点的时候，该节点以一定的概率与已有的所有节点相连（这个概率与已有节点的度有关），重复，直到这个新节点有M条边。重复，直到整个图有N个节点。该方法包含一个参数M，故以BA(M)表示。</li>
+<li>WS: 所有N个节点排成一个圈，每个节点与两边邻近的K/2个节点相连。之后按照顺时针方向遍历每一个节点，与当前节点相连的某一条边以概率P与其他某个节点相连。重复K/2次。该方法包含2个参数K和P，故以WS(K,P)表示。</li>
 </ul>
 <p>其中模型的节点总数N由论文作者根据网络复杂度（FLOPs）手动指定，因此ER方法的参数搜索空间为P∈[0.0,1.0]，BA方法的参数搜索空间为M∈[1,N]，WS方法的参数搜索空间为K∈[1,N-1] x P∈[0.0,1.0]。图1是三种方法生成的随机图。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521155016.png" alt><strong>二、把生成的随机图Random Graph转换为一个神经网络NN</strong></p>
-<p><strong>将随机图转化为DAG</strong></p>
+<h4 id="二、将Random-Graph转换为一个神经网络NN"><a href="#二、将Random-Graph转换为一个神经网络NN" class="headerlink" title="二、将Random Graph转换为一个神经网络NN"></a>二、将Random Graph转换为一个神经网络NN</h4><p><strong>将随机图转化为DAG</strong></p>
 <p>首先要给每条边指定一个方向，即把生成的随机图Random Graph转换为有向无环图DAG。方法就是给每个节点分配一个索引index（从1到N），若两个节点之间有边，则边的方向从小索引节点到大索引节点。其中ER方法按照随机的方式给N个节点分配索引；BA方法给初始的M个节点分配索引1~M，之后每增加一个节点，其索引加1；WS方法则按照顺时针方向从小到大给N个节点分配索引。</p>
 <p><strong>为DAG的边和节点赋上操作</strong></p>
 <p>边操作：本文中假设每条边都代表着数据流，将一个tensor从一个节点送到另一个节点。</p>
 <p>节点操作：每一个节点代表一个一个实际操作。这个操作可以细分为以下三步：</p>
 <ul>
-<li><p>Aggregation：（输入操作：聚合）输入数据(从一条或多条边)到节点通过加权求和来聚合在一起；其中权重是正向可学习的。</p>
-</li>
-<li><p>Transformation：（转换操作：卷积）聚合数据由定义为[relu-convolu- bn]三元组的转换处理。所有节点都使用相同类型的卷积，默认情况下为3×3可分卷积。</p>
-</li>
-<li><p>Distribution：（输出操作：复制）节点的输出边缘发送转换后的数据的相同副本。</p>
-</li>
+<li>Aggregation：（输入操作：聚合）输入数据(从一条或多条边)到节点通过加权求和来聚合在一起；其中权重是正向可学习的。</li>
+<li>Transformation：（转换操作：卷积）聚合数据由定义为[relu-convolu-bn]三元组的转换处理。所有节点都使用相同类型的卷积，默认情况下为3×3可分卷积。</li>
+<li>Distribution：（输出操作：复制）节点的输出边缘发送转换后的数据的相同副本。</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521155139.png" alt></p>
 <p>这样设计操作带来的一些特点：</p>
@@ -736,13 +714,11 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
 <p>这些属性几乎将FLOPs和参数计数与网络连接解耦，例如，在随机网络实例或不同生成器之间，FLOPs的偏差通常为±2%。这可以在不增加/减少模型复杂性的情况下比较不同的图。因此，任务性能的差异反映了连接模式的属性。</p>
 <p><strong>设置cell的输入节点和输出节点</strong></p>
 <p>给DAG指定唯一的输入节点（input）和唯一的输出节点(output)。DAG本身包含N个节点，那么额外指定一个输入节点与DAG中所有入度为0的节点相连，其负责将输入的图片转发出去；再额外指定一个输出节点与DAG中所有出度为0的节点相连，该节点进行均值计算后将结果输出。</p>
-<p><strong>三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN</strong></p>
-<p>借鉴其他经典深度学习神经网络，作者将多个NN堆叠起来形成最终的随机连接神经网络RandWireNN。图3为一个示例，其包含共5个stages，其中stage1是一个卷积层，stage2可以是一个卷积层或者是一个NN，stage3、stage4和stage5均为NN。不同stage之间：卷积操作的stride为2，故feature map的大小逐渐减半；卷积操作的卷积核的数量x2，故feature map的通道数(即C)也x2。</p>
+<h4 id="三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN"><a href="#三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN" class="headerlink" title="三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN"></a><strong>三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN</strong></h4><p>借鉴其他经典深度学习神经网络，作者将多个NN堆叠起来形成最终的随机连接神经网络RandWireNN。图3为一个示例，其包含共5个stages，其中stage1是一个卷积层，stage2可以是一个卷积层或者是一个NN，stage3、stage4和stage5均为NN。不同stage之间：卷积操作的stride为2，故feature map的大小逐渐减半；卷积操作的卷积核的数量x2，故feature map的通道数(即C)也x2。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/006tNc79ly1g36yof1qjrj30hx0puwo8.jpg" alt></p>
 <p>其中每个NN的节点数N（不包含输入和输出节点）设置为32，通道数C设置为78或者109/154。不同的（N,C）对应不同的网络复杂度（FLOPs），这样可以跟不同规模（small/regular/larger）的其他经典网络进行实验比较。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521155551.png" alt></p>
-<p><strong>四、在ImageNet 1000-class任务上验证RandWireNN的表现</strong></p>
-<p>（1）三个随机图生成方法（ER，BA，WS）的比较</p>
+<h4 id="四、在ImageNet-1000-class任务上验证RandWireNN的表现"><a href="#四、在ImageNet-1000-class任务上验证RandWireNN的表现" class="headerlink" title="四、在ImageNet 1000-class任务上验证RandWireNN的表现"></a><strong>四、在ImageNet 1000-class任务上验证RandWireNN的表现</strong></h4><p>（1）三个随机图生成方法（ER，BA，WS）的比较</p>
 <p>如图4所示，WS方法的表现最好，于是接下来作者挑选了WS（4,0.75）与其他网络进行比较。论文还进行了另外一个网络结构鲁棒性测试的实验，即将网络中的某个节点或者某条边随机去掉，然后测试网络的表现，最后发现WS的结构最不稳定。这个研究点很有意思，也许将来会有一种网络生成器能够生成又好又鲁棒的网络结构，类似大脑，也许有种大脑结构最不容易得精神疾病。</p>
 <p><img src="https://raw.githubusercontent.com/JiaoYuZhang/picRep/master/img/20190521155705.png" alt></p>
 <p>（2）WS（4,0.75）与其他网络的比较</p>
@@ -1041,7 +1017,7 @@ J\left(\theta_{c}\right)=E_{P\left(a_{1 : T} ; \theta_{c}\right)}[R]</script><p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-of-NAS"><span class="nav-number">1.</span> <span class="nav-text">Introduction of NAS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索空间（Search-Space）"><span class="nav-number">1.1.</span> <span class="nav-text">搜索空间（Search Space）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索策略（Search-Strategy）"><span class="nav-number">1.2.</span> <span class="nav-text">搜索策略（Search Strategy）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能评估策略（Performace-Estimation-Strategy）"><span class="nav-number">1.3.</span> <span class="nav-text">性能评估策略（Performace Estimation Strategy）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAS-amp-NASNet-amp-ENAS"><span class="nav-number">2.</span> <span class="nav-text">NAS &amp; NASNet &amp; ENAS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NAS"><span class="nav-number">2.1.</span> <span class="nav-text">NAS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NASNet"><span class="nav-number">2.2.</span> <span class="nav-text">NASNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ENAS"><span class="nav-number">2.3.</span> <span class="nav-text">ENAS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Latest-architecture-search-algorithms"><span class="nav-number">3.</span> <span class="nav-text">Latest architecture search algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Darts"><span class="nav-number">3.1.</span> <span class="nav-text">Darts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RandWiredNN"><span class="nav-number">3.2.</span> <span class="nav-text">RandWiredNN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-of-NAS"><span class="nav-number">1.</span> <span class="nav-text">Introduction of NAS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索空间（Search-Space）"><span class="nav-number">1.1.</span> <span class="nav-text">搜索空间（Search Space）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索策略（Search-Strategy）"><span class="nav-number">1.2.</span> <span class="nav-text">搜索策略（Search Strategy）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能评估策略（Performace-Estimation-Strategy）"><span class="nav-number">1.3.</span> <span class="nav-text">性能评估策略（Performace Estimation Strategy）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAS-amp-NASNet-amp-ENAS"><span class="nav-number">2.</span> <span class="nav-text">NAS &amp; NASNet &amp; ENAS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NAS"><span class="nav-number">2.1.</span> <span class="nav-text">NAS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-use-a-controller-RNN-to-generate-an-CNN-model"><span class="nav-number">2.1.1.</span> <span class="nav-text">How to use a controller RNN to generate an CNN model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-train-a-controller-RNN-with-REINFORCE"><span class="nav-number">2.1.2.</span> <span class="nav-text">How to train a controller RNN with REINFORCE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-add-skip-connections-and-other-layer-types"><span class="nav-number">2.1.3.</span> <span class="nav-text">How to add skip connections and other layer types</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NASNet"><span class="nav-number">2.2.</span> <span class="nav-text">NASNet</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NASNet-cell"><span class="nav-number">2.2.1.</span> <span class="nav-text">NASNet cell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">2.2.2.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ENAS"><span class="nav-number">2.3.</span> <span class="nav-text">ENAS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#搜索空间"><span class="nav-number">2.3.1.</span> <span class="nav-text">搜索空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#架构搜索与训练权重迭代进行"><span class="nav-number">2.3.2.</span> <span class="nav-text">架构搜索与训练权重迭代进行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果-1"><span class="nav-number">2.3.3.</span> <span class="nav-text">实验结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Latest-architecture-search-algorithms"><span class="nav-number">3.</span> <span class="nav-text">Latest architecture search algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Darts"><span class="nav-number">3.1.</span> <span class="nav-text">Darts</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#搜索空间的可微化处理"><span class="nav-number">3.1.1.</span> <span class="nav-text">搜索空间的可微化处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代训练框架参数-alpha-和权重参数-w"><span class="nav-number">3.1.2.</span> <span class="nav-text">迭代训练框架参数$\alpha$和权重参数$w$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果-2"><span class="nav-number">3.1.3.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RandWiredNN"><span class="nav-number">3.2.</span> <span class="nav-text">RandWiredNN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、基于图论的随机图方法生成随机图Random-Graph"><span class="nav-number">3.2.1.</span> <span class="nav-text">一、基于图论的随机图方法生成随机图Random Graph</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、将Random-Graph转换为一个神经网络NN"><span class="nav-number">3.2.2.</span> <span class="nav-text">二、将Random Graph转换为一个神经网络NN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN"><span class="nav-number">3.2.3.</span> <span class="nav-text">三、将多个NN堆叠起来，形成最终的随机连接神经网络RandWireNN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、在ImageNet-1000-class任务上验证RandWireNN的表现"><span class="nav-number">3.2.4.</span> <span class="nav-text">四、在ImageNet 1000-class任务上验证RandWireNN的表现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>
